@@ -1,0 +1,23 @@
+{
+  "name": "oppwa-v2",
+  "version": "1.0.0",
+  "description": "",
+  "source": "src/index.html",
+  "scripts": {
+    "watch": "parcel watch --public-url ./",
+    "build": "parcel build --public-url ./"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bulma": "^0.9.4",
+    "nanoid": "^3.3.4",
+    "vue": "^3.2.33"
+  },
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.5.0",
+    "@parcel/transformer-vue": "^2.5.0",
+    "parcel": "^2.5.0"
+  }
+}
