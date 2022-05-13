@@ -1,6 +1,6 @@
 <script>
 // import individual components
-import CopyandPay from "./CopyandPay.vue";
+import CopyandPay from "./views/CopyandPay.vue";
 
 export default {
   // component registration

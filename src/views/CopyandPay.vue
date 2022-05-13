@@ -3,10 +3,19 @@
 import { processParameters } from "../utils/stringProcessing";
 import { nanoid } from "nanoid";
 
+// import reusable components
+import FormInput from "../components/FormInput.vue";
+
 // this will allow parcel to include the php file in the build process so that everything is in 1 directory
 const copyAndPayScriptPath = require("url:../../php/CopyandPay.php");
 
 export default {
+  // component registration
+  components: {
+    FormInput,
+  },
+
+  //
   data() {
     return {
       // page related details
@@ -90,32 +99,18 @@ export default {
   <hr />
 
   <!-- ENDPOINT -->
-  <div class="field">
-    <label class="label">API Endpoint</label>
-    <div class="control">
-      <input
-        type="text"
-        :class="inputs"
-        spellcheck="false"
-        v-model="request.endPoint"
-      />
-    </div>
-    <p class="help">{{ endPointHelper }}</p>
-  </div>
+  <FormInput
+    label="API Endpoint"
+    :helper="endPointHelper"
+    v-model="request.endPoint"
+  />
 
   <!-- TOKEN -->
-  <div class="field">
-    <label class="label">Access Token</label>
-    <div class="control">
-      <input
-        type="text"
-        :class="inputs"
-        spellcheck="false"
-        v-model="request.authToken"
-      />
-    </div>
-    <p class="help">{{ accessTokenHelper }}</p>
-  </div>
+  <FormInput
+    label="Access Token"
+    :helper="accessTokenHelper"
+    v-model="request.authToken"
+  />
 
   <!-- PARAMS -->
   <div class="field">
