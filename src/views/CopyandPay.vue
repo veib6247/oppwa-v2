@@ -53,6 +53,8 @@ export default {
         ],
         frontEndParameters: "",
       },
+
+      autoLaunchWidget: true,
     };
   },
 
@@ -98,34 +100,50 @@ export default {
   <p class="sub">{{ subTitle }}</p>
   <hr />
 
-  <!-- ENDPOINT -->
-  <FormInput
-    label="API Endpoint"
-    placeholder="https://eu-test.oppwa.com/v1/checkouts"
-    :helper="endPointHelper"
-    v-model="request.endPoint"
-  />
+  <div class="columns">
+    <div class="column">
+      <!-- ENDPOINT -->
+      <FormInput
+        label="API Endpoint"
+        placeholder="https://eu-test.oppwa.com/v1/checkouts"
+        :helper="endPointHelper"
+        v-model="request.endPoint"
+      />
 
-  <!-- TOKEN -->
-  <FormInput
-    label="Access Token"
-    placeholder="OGE4Mjk0MTc0YjdlY2IyODAxNGI5Njk5MjIwMDE1Y2N8c3k2S0pzVDg="
-    :helper="accessTokenHelper"
-    v-model="request.authToken"
-  />
+      <!-- TOKEN -->
+      <FormInput
+        label="Access Token"
+        type="password"
+        placeholder="OGE4Mjk0MTc0YjdlY2IyODAxNGI5Njk5MjIwMDE1Y2N8c3k2S0pzVDg="
+        :helper="accessTokenHelper"
+        v-model="request.authToken"
+      />
 
-  <!-- PARAMS -->
-  <TextData
-    label="Data Parameters"
-    :placeholder="processParameters"
-    v-model="request.frontEndParameters"
-  />
+      <!-- PARAMS -->
+      <TextData
+        label="Data Parameters"
+        :placeholder="processParameters"
+        v-model="request.frontEndParameters"
+      />
 
-  <!-- generate checkout ID button -->
-  <FormButton
-    button-label="Generate Checkout ID"
-    :is-loading="false"
-    @submit-data="generateCheckoutId"
-  />
+      <div class="field">
+        <div class="control">
+          <label class="checkbox is-size-7">
+            <input type="checkbox" v-model="autoLaunchWidget" />
+            Automatically launch the widget if a checkout ID is generated
+            successfully.
+          </label>
+        </div>
+      </div>
+
+      <!-- generate checkout ID button -->
+      <FormButton
+        button-label="Generate Checkout ID"
+        :is-loading="false"
+        @submit-data="generateCheckoutId"
+      />
+    </div>
+    <div class="column"></div>
+  </div>
 </template>
 

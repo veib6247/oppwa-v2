@@ -6,6 +6,11 @@ export default {
       default: "",
     },
 
+    type: {
+      type: String,
+      default: "text",
+    },
+
     placeholder: {
       type: String,
       default: "",
@@ -29,7 +34,7 @@ export default {
     <label class="label">{{ label }}</label>
     <div class="control">
       <input
-        type="text"
+        :type="type"
         class="input is-small mono"
         spellcheck="false"
         :placeholder="placeholder"
