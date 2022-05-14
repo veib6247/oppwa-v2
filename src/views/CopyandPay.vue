@@ -6,6 +6,7 @@ import { nanoid } from "nanoid";
 // import reusable components
 import FormInput from "../components/FormInput.vue";
 import TextData from "../components/TextData.vue";
+import FormButton from "../components/FormButton.vue";
 
 // this will allow parcel to include the php file in the build process so that everything is in 1 directory
 const copyAndPayScriptPath = require("url:../../php/CopyandPay.php");
@@ -18,6 +19,7 @@ export default {
   components: {
     FormInput,
     TextData,
+    FormButton,
   },
 
   //
@@ -54,6 +56,21 @@ export default {
     };
   },
 
+  methods: {
+    generateTransactionId() {
+      let trxId = nanoid();
+      console.info(`Generated Transaction ID: ${trxId}`);
+      this.request.defaultParameters.push(`merchantTransactionId=${trxId}`);
+    },
+
+    generateCheckoutId() {
+      console.log(`Endpoint: ${this.request.endPoint}`);
+      console.log(`authToken: ${this.request.authToken}`);
+      console.log(`URL string parameters: ${this.processedURLParameters}`);
+      console.log(`CopyandPay PHP script path: ${copyAndPayScriptPath}`);
+    },
+  },
+
   computed: {
     // returns processed string to display to text area
     processParameters() {
@@ -67,15 +84,11 @@ export default {
   },
 
   mounted() {
-    console.log("CopyandPay PHP script path: ", copyAndPayScriptPath);
-
     // generate new merchantTransactionId for every page load
-    this.request.defaultParameters.push(`merchantTransactionId=${nanoid()}`);
+    this.generateTransactionId();
 
     // process the default params into the frontend using computed function
     this.request.frontEndParameters = this.processParameters;
-
-    console.log("URL string parameters: ", this.processedURLParameters);
   },
 };
 </script>
@@ -106,6 +119,11 @@ export default {
     label="Data Parameters"
     :placeholder="processParameters"
     v-model="request.frontEndParameters"
+  />
+
+  <FormButton
+    button-label="Generate Checkout ID"
+    @submit-data="generateCheckoutId"
   />
 </template>
 
