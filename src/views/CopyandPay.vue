@@ -5,14 +5,19 @@ import { nanoid } from "nanoid";
 
 // import reusable components
 import FormInput from "../components/FormInput.vue";
+import TextData from "../components/TextData.vue";
 
 // this will allow parcel to include the php file in the build process so that everything is in 1 directory
 const copyAndPayScriptPath = require("url:../../php/CopyandPay.php");
 
+/**
+ * main stuff
+ */
 export default {
   // component registration
   components: {
     FormInput,
+    TextData,
   },
 
   //
@@ -50,15 +55,6 @@ export default {
   },
 
   computed: {
-    // default classes for inputs
-    inputs() {
-      return {
-        input: true,
-        "is-small": true,
-        mono: true,
-      };
-    },
-
     // default classes for textAreas
     textAreas() {
       return {
@@ -113,15 +109,11 @@ export default {
   />
 
   <!-- PARAMS -->
-  <div class="field">
-    <label class="label">Data Parameters</label>
-    <div class="control">
-      <textarea
-        :class="textAreas"
-        rows="13"
-        v-model="request.frontEndParameters"
-      ></textarea>
-    </div>
-  </div>
+  <TextData
+    label="Data Parameters"
+    helper=""
+    :placeholder="processParameters"
+    v-model="request.frontEndParameters"
+  />
 </template>
 
