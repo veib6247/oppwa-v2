@@ -55,15 +55,6 @@ export default {
   },
 
   computed: {
-    // default classes for textAreas
-    textAreas() {
-      return {
-        textarea: true,
-        "is-small": true,
-        mono: true,
-      };
-    },
-
     // returns processed string to display to text area
     processParameters() {
       return processParameters(this.request.defaultParameters);
@@ -97,6 +88,7 @@ export default {
   <!-- ENDPOINT -->
   <FormInput
     label="API Endpoint"
+    placeholder="https://eu-test.oppwa.com/v1/checkouts"
     :helper="endPointHelper"
     v-model="request.endPoint"
   />
@@ -104,6 +96,7 @@ export default {
   <!-- TOKEN -->
   <FormInput
     label="Access Token"
+    placeholder="OGE4Mjk0MTc0YjdlY2IyODAxNGI5Njk5MjIwMDE1Y2N8c3k2S0pzVDg="
     :helper="accessTokenHelper"
     v-model="request.authToken"
   />

@@ -6,6 +6,11 @@ export default {
       default: "",
     },
 
+    placeholder: {
+      type: String,
+      default: "",
+    },
+
     helper: {
       type: String,
       default: "",
@@ -27,7 +32,7 @@ export default {
         type="text"
         class="input is-small mono"
         spellcheck="false"
-        :placeholder="label"
+        :placeholder="placeholder"
         :value="modelValue"
         @input="$emit('update:modelValue', $event.target.value)"
       />

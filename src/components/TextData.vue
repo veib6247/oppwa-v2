@@ -26,6 +26,7 @@ export default {
       <textarea
         class="textarea is-small mono"
         rows="13"
+        :placeholder="placeholder"
         :value="modelValue"
         @input="$emit('update:modelValue', $event.target.value)"
       ></textarea>
