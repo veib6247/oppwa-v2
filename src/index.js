@@ -1,4 +1,5 @@
 import 'bulma'
+import 'bulma-switch'
 import { createApp } from 'vue'
 
 // import the root component App from a single-file component.

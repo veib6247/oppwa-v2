@@ -5,8 +5,12 @@ import { nanoid } from "nanoid";
 
 // import reusable components
 import FormInput from "../components/FormInput.vue";
-import TextData from "../components/TextData.vue";
 import FormButton from "../components/FormButton.vue";
+import FormSwitch from "../components/FormSwitch.vue";
+import TextData from "../components/TextData.vue";
+
+// main widget object, to be modified before launching
+var wpwlOptions = {};
 
 // this will allow parcel to include the php file in the build process so that everything is in 1 directory
 const copyAndPayScriptPath = require("url:../../php/CopyandPay.php");
@@ -18,8 +22,9 @@ export default {
   // component registration
   components: {
     FormInput,
-    TextData,
     FormButton,
+    FormSwitch,
+    TextData,
   },
 
   //
@@ -55,6 +60,17 @@ export default {
       },
 
       autoLaunchWidget: true,
+
+      // widget customization
+      wpwlOptions: {
+        style: "card",
+        requireCvv: true,
+        allowEmptyCvv: false,
+        showCVVHint: false,
+        validation: true,
+        showLabels: true,
+        showPlaceholders: true,
+      },
     };
   },
 
@@ -66,10 +82,18 @@ export default {
     },
 
     generateCheckoutId() {
+      console.info(`Automatically launch widget: ${this.autoLaunchWidget}`);
       console.log(`Endpoint: ${this.request.endPoint}`);
       console.log(`authToken: ${this.request.authToken}`);
       console.log(`URL string parameters: ${this.processedURLParameters}`);
       console.log(`CopyandPay PHP script path: ${copyAndPayScriptPath}`);
+
+      if (this.autoLaunchWidget) this.launchWidget();
+    },
+
+    launchWidget() {
+      wpwlOptions = this.wpwlOptions;
+      console.log("Widget customizations applied: ", wpwlOptions);
     },
   },
 
@@ -101,6 +125,7 @@ export default {
   <hr />
 
   <div class="columns">
+    <!-- left column -->
     <div class="column">
       <!-- ENDPOINT -->
       <FormInput
@@ -126,15 +151,12 @@ export default {
         v-model="request.frontEndParameters"
       />
 
-      <div class="field">
-        <div class="control">
-          <label class="checkbox is-size-7">
-            <input type="checkbox" v-model="autoLaunchWidget" />
-            Automatically launch the widget if a checkout ID is generated
-            successfully.
-          </label>
-        </div>
-      </div>
+      <!-- auto-launch the widget if checkout id is good -->
+      <FormSwitch
+        id="autoSwitch"
+        label="Auto-launch the widget if a checkout ID is generated successfully."
+        v-model="autoLaunchWidget"
+      />
 
       <!-- generate checkout ID button -->
       <FormButton
@@ -143,7 +165,49 @@ export default {
         @submit-data="generateCheckoutId"
       />
     </div>
-    <div class="column"></div>
+
+    <!-- right column -->
+    <div class="column">
+      <div class="box">
+        <h4>Widget Customizations</h4>
+        <hr />
+        <FormSwitch
+          id="requireCvv"
+          label="requireCvv - Determine whether the CVV field is presented on the payment form."
+          v-model="wpwlOptions.requireCvv"
+        />
+
+        <FormSwitch
+          id="allowEmptyCvv"
+          label="allowEmptyCvv - Determines whether the CVV field can be empty. By default it is false."
+          v-model="wpwlOptions.allowEmptyCvv"
+        />
+
+        <FormSwitch
+          id="showCVVHint"
+          label="showCVVHint - If set to true then the credit card form will display a hint on where the CVV is located when the mouse is hovering over the CVV field."
+          v-model="wpwlOptions.showCVVHint"
+        />
+
+        <FormSwitch
+          id="validation"
+          label="validation - Use validation. If false, it disables validation and the functions 'validate' and 'on Submit' will not be called."
+          v-model="wpwlOptions.validation"
+        />
+
+        <FormSwitch
+          id="showLabels"
+          label="showLabels - Shows or hides input labels. Default is true."
+          v-model="wpwlOptions.showLabels"
+        />
+
+        <FormSwitch
+          id="showPlaceholders"
+          label="showPlaceholders - Shows or hides input placeholders. Default is true."
+          v-model="wpwlOptions.showPlaceholders"
+        />
+      </div>
+    </div>
   </div>
 </template>
 

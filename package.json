@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "bulma": "^0.9.4",
+    "bulma-switch": "^2.0.4",
     "nanoid": "^3.3.4",
     "vue": "^3.2.33"
   },
