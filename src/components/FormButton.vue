@@ -5,6 +5,11 @@ export default {
       type: String,
       default: "",
     },
+
+    isLoading: {
+      type: Boolean,
+      default: false,
+    },
   },
 };
 </script>
@@ -13,6 +18,7 @@ export default {
     <div class="control">
       <button
         class="button is-small is-dark is-rounded raleway"
+        :class="{ 'is-loading': isLoading }"
         @click="$emit('submitData')"
       >
         {{ buttonLabel }}

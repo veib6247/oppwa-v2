@@ -121,8 +121,10 @@ export default {
     v-model="request.frontEndParameters"
   />
 
+  <!-- generate checkout ID button -->
   <FormButton
     button-label="Generate Checkout ID"
+    :is-loading="false"
     @submit-data="generateCheckoutId"
   />
 </template>
