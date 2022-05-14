@@ -111,7 +111,6 @@ export default {
   <!-- PARAMS -->
   <TextData
     label="Data Parameters"
-    helper=""
     :placeholder="processParameters"
     v-model="request.frontEndParameters"
   />

@@ -11,11 +11,6 @@ export default {
       default: "",
     },
 
-    helper: {
-      type: String,
-      default: "",
-    },
-
     modelValue: {
       type: String,
       default: "",
@@ -32,12 +27,8 @@ export default {
         class="textarea is-small mono"
         rows="13"
         :value="modelValue"
-        :placeholder="placeholder"
         @input="$emit('update:modelValue', $event.target.value)"
       ></textarea>
     </div>
   </div>
-  <p class="helper is-size-7">
-    {{ helper }}
-  </p>
 </template>
