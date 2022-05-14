@@ -62,6 +62,8 @@ export default {
       autoLaunchWidget: true,
 
       // widget customization
+      selectedStyle: "card",
+
       wpwlOptions: {
         style: "card",
         requireCvv: true,
@@ -92,6 +94,7 @@ export default {
     },
 
     launchWidget() {
+      wpwlOptions.style = this.selectedStyle;
       wpwlOptions = this.wpwlOptions;
       console.log("Widget customizations applied: ", wpwlOptions);
     },
@@ -171,6 +174,22 @@ export default {
       <div class="box">
         <h4>Widget Customizations</h4>
         <hr />
+
+        <div class="field">
+          <label class="label is-small">Style</label>
+          <div class="control">
+            <div class="select is-small is-dark is-fullwidth">
+              <select class="raleway" v-model="selectedStyle">
+                <option>card</option>
+                <option>logos</option>
+                <option>plain</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <label class="label is-small">Widget Behavior</label>
+
         <FormSwitch
           id="requireCvv"
           label="requireCvv - Determine whether the CVV field is presented on the payment form."
