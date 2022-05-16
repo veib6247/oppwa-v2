@@ -9,6 +9,7 @@ import FormButton from "../components/FormButton.vue";
 import FormSwitch from "../components/FormSwitch.vue";
 import TextData from "../components/TextData.vue";
 import FormDisplayResponse from "../components/FormDisplayResponse.vue";
+import Notification from "../components/Notification.vue";
 
 // main widget object, to be modified before launching
 var wpwlOptions = {};
@@ -27,6 +28,7 @@ export default {
     FormSwitch,
     TextData,
     FormDisplayResponse,
+    Notification,
   },
 
   //
@@ -63,6 +65,7 @@ export default {
       },
 
       response: "",
+      result: "",
 
       autoLaunchWidget: true,
 
@@ -93,6 +96,7 @@ export default {
     async generateCheckoutId() {
       // clear current response
       this.response = "";
+      this.result = "";
 
       try {
         this.request.isOngoing = true; // start button loading animation
@@ -108,6 +112,7 @@ export default {
 
         // parse response to json
         this.response = await rawResponse.json();
+        this.result = this.response.result;
 
         // if checkout id is generated successfully
         if (this.response.id) if (this.autoLaunchWidget) this.launchWidget(); // check with autolaunch is enabled
@@ -255,14 +260,26 @@ export default {
           label="Auto-launch the widget if a checkout ID is generated successfully."
           v-model="autoLaunchWidget"
         />
-
-        <!-- display response for checkout ID generation -->
-        <FormDisplayResponse
-          label="Generate Checkout ID Response"
-          :data="response"
-          v-if="response"
-        />
       </div>
     </div>
   </div>
+
+  <Notification
+    :notif-description="result.description"
+    :result-code="result.code"
+    v-if="result.code"
+  >
+    <!-- display response for checkout ID generation -->
+    <FormDisplayResponse
+      label="Generate Checkout ID Response"
+      :data="response"
+      v-if="response"
+    />
+    <!-- generate checkout ID button -->
+    <FormButton
+      button-label="Launch CopyandPay Widget"
+      v-if="response.id && !autoLaunchWidget"
+      @submit-data="launchWidget"
+    />
+  </Notification>
 </template>

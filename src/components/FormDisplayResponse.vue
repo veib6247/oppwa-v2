@@ -15,7 +15,7 @@ export default {
 <template>
   <div class="field">
     <div class="control">
-      <label class="label">{{ label }}</label>
+      <label class="label is-size-7">{{ label }}</label>
       <textarea
         rows="13"
         class="textarea is-small mono"
