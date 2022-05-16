@@ -79,8 +79,10 @@ export default {
   methods: {
     generateTransactionId() {
       let trxId = nanoid();
-      console.info(`Generated Transaction ID: ${trxId}`);
-      this.request.defaultParameters.push(`merchantTransactionId=${trxId}`);
+      console.info(`Generated Transaction ID: test_transaction_${trxId}`);
+      this.request.defaultParameters.push(
+        `merchantTransactionId=test_transaction_${trxId}`
+      );
     },
 
     generateCheckoutId() {
@@ -90,13 +92,15 @@ export default {
       console.log(`URL string parameters: ${this.processedURLParameters}`);
       console.log(`CopyandPay PHP script path: ${copyAndPayScriptPath}`);
 
+      // check with autolaunch is enabled
       if (this.autoLaunchWidget) this.launchWidget();
     },
 
     launchWidget() {
+      // apply customizations to the wpwlOptions object
       wpwlOptions.style = this.selectedStyle;
       wpwlOptions = this.wpwlOptions;
-      console.log("Widget customizations applied: ", wpwlOptions);
+      console.info("Widget customizations applied: ", wpwlOptions);
     },
   },
 
@@ -229,4 +233,3 @@ export default {
     </div>
   </div>
 </template>
-
