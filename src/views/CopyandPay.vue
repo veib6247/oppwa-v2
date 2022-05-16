@@ -8,6 +8,7 @@ import FormInput from "../components/FormInput.vue";
 import FormButton from "../components/FormButton.vue";
 import FormSwitch from "../components/FormSwitch.vue";
 import TextData from "../components/TextData.vue";
+import FormDisplayResponse from "../components/FormDisplayResponse.vue";
 
 // main widget object, to be modified before launching
 var wpwlOptions = {};
@@ -25,6 +26,7 @@ export default {
     FormButton,
     FormSwitch,
     TextData,
+    FormDisplayResponse,
   },
 
   //
@@ -57,7 +59,10 @@ export default {
           "customer.surname=Tester",
         ],
         frontEndParameters: "",
+        isOngoing: false,
       },
+
+      response: "",
 
       autoLaunchWidget: true,
 
@@ -85,22 +90,41 @@ export default {
       );
     },
 
-    generateCheckoutId() {
-      console.info(`Automatically launch widget: ${this.autoLaunchWidget}`);
-      console.log(`Endpoint: ${this.request.endPoint}`);
-      console.log(`authToken: ${this.request.authToken}`);
-      console.log(`URL string parameters: ${this.processedURLParameters}`);
-      console.log(`CopyandPay PHP script path: ${copyAndPayScriptPath}`);
+    async generateCheckoutId() {
+      // clear current response
+      this.response = "";
 
-      // check with autolaunch is enabled
-      if (this.autoLaunchWidget) this.launchWidget();
+      try {
+        this.request.isOngoing = true; // start button loading animation
+
+        const rawResponse = await fetch(copyAndPayScriptPath, {
+          method: "POST",
+          body: JSON.stringify({
+            endPoint: this.request.endPoint,
+            authToken: this.request.authToken,
+            parameters: this.processedURLParameters,
+          }),
+        });
+
+        // parse response to json
+        this.response = await rawResponse.json();
+
+        // if checkout id is generated successfully
+        if (this.response.id) if (this.autoLaunchWidget) this.launchWidget(); // check with autolaunch is enabled
+      } catch (error) {
+        console.error(error);
+      } finally {
+        // console.info(this.response);
+        this.request.isOngoing = false;
+      }
     },
 
     launchWidget() {
+      console.log(`Launching widget with checkout ID: ${this.response.id}`);
+
       // apply customizations to the wpwlOptions object
       wpwlOptions.style = this.selectedStyle;
       wpwlOptions = this.wpwlOptions;
-      console.info("Widget customizations applied: ", wpwlOptions);
     },
   },
 
@@ -158,17 +182,10 @@ export default {
         v-model="request.frontEndParameters"
       />
 
-      <!-- auto-launch the widget if checkout id is good -->
-      <FormSwitch
-        id="autoSwitch"
-        label="Auto-launch the widget if a checkout ID is generated successfully."
-        v-model="autoLaunchWidget"
-      />
-
       <!-- generate checkout ID button -->
       <FormButton
         button-label="Generate Checkout ID"
-        :is-loading="false"
+        :is-loading="request.isOngoing"
         @submit-data="generateCheckoutId"
       />
     </div>
@@ -228,6 +245,22 @@ export default {
           id="showPlaceholders"
           label="showPlaceholders - Shows or hides input placeholders. Default is true."
           v-model="wpwlOptions.showPlaceholders"
+        />
+
+        <label class="label is-small">Internal Testing Behavior</label>
+
+        <!-- auto-launch the widget if checkout id is good -->
+        <FormSwitch
+          id="autoSwitch"
+          label="Auto-launch the widget if a checkout ID is generated successfully."
+          v-model="autoLaunchWidget"
+        />
+
+        <!-- display response for checkout ID generation -->
+        <FormDisplayResponse
+          label="Generate Checkout ID Response"
+          :data="response"
+          v-if="response"
         />
       </div>
     </div>
