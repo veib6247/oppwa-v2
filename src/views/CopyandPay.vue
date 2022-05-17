@@ -86,10 +86,8 @@ export default {
 
   methods: {
     generateTransactionId() {
-      let trxId = nanoid();
-      console.info(`Generated Transaction ID: test_transaction_${trxId}`);
       this.request.defaultParameters.push(
-        `merchantTransactionId=test_transaction_${trxId}`
+        `merchantTransactionId=test_transaction_${nanoid()}`
       );
     },
 
@@ -125,11 +123,41 @@ export default {
     },
 
     launchWidget() {
-      console.log(`Launching widget with checkout ID: ${this.response.id}`);
+      console.log(`Launching widget, checkout ID: ${this.response.id}`);
+
+      // check if existing widgetScript element exists in the HTML head and remove it
+      const checkElement = document.getElementById("widget-script-tag");
+
+      if (document.head.contains(checkElement)) {
+        console.info("widget-script-tag element already exists, removing now.");
+        document.head.removeChild(checkElement);
+      }
+
+      // create new script element
+      console.info("Creating new widget Script element, appending to head.");
+      let widgetScript = document.createElement("script");
+      widgetScript.id = "widget-script-tag";
+
+      // get subdomain of endpoint and prefix to the src
+      const subDomain = this.request.endPoint.split(".")[0];
+      widgetScript.src = `${subDomain}.oppwa.com/v1/paymentWidgets.js?checkoutId=${this.response.id}`;
+      document.querySelector("head").append(widgetScript);
 
       // apply customizations to the wpwlOptions object
       wpwlOptions.style = this.selectedStyle;
       wpwlOptions = this.wpwlOptions;
+      let widgetCustomizations = document.createElement("script");
+      widgetCustomizations;
+
+      // create and add the form to the html body
+      let widgetForm = document.createElement("form");
+      widgetForm.setAttribute(
+        "action",
+        "https://docs.oppwa.com/tutorials/integration-guide"
+      );
+      widgetForm.setAttribute("class", "paymentWidgets");
+      widgetForm.setAttribute("data-brands", "VISA MASTER");
+      document.getElementById("form-goes-here").append(widgetForm);
     },
   },
 
@@ -271,7 +299,7 @@ export default {
   >
     <!-- display response for checkout ID generation -->
     <FormDisplayResponse
-      label="Generate Checkout ID Response"
+      label="Complete JSON Response"
       :data="response"
       v-if="response"
     />
@@ -282,4 +310,7 @@ export default {
       @submit-data="launchWidget"
     />
   </Notification>
+
+  <!-- widget here -->
+  <div id="form-goes-here"></div>
 </template>

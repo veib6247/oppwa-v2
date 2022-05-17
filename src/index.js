@@ -1,5 +1,6 @@
 import 'bulma'
 import 'bulma-switch'
+import 'jquery'
 
 import { createApp } from 'vue'
 
