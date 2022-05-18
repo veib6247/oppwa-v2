@@ -11,9 +11,6 @@ import TextData from "../components/TextData.vue";
 import FormDisplayResponse from "../components/FormDisplayResponse.vue";
 import Notification from "../components/Notification.vue";
 
-// main widget object, to be modified before launching
-var wpwlOptions = {};
-
 // this will allow parcel to include the php file in the build process so that everything is in 1 directory
 const copyAndPayScriptPath = require("url:../../php/CopyandPay.php");
 
@@ -69,9 +66,6 @@ export default {
 
       autoLaunchWidget: true,
 
-      // widget customization
-      selectedStyle: "card",
-
       wpwlOptions: {
         style: "card",
         requireCvv: true,
@@ -112,17 +106,20 @@ export default {
         this.response = await rawResponse.json();
         this.result = this.response.result;
 
-        // if checkout id is generated successfully
-        if (this.response.id) if (this.autoLaunchWidget) this.launchWidget(); // check with autolaunch is enabled
+        // if checkout id is generated successfully and
+        // check with autolaunch is enabled
+        if (this.response.id) if (this.autoLaunchWidget) this.launchWidget();
       } catch (error) {
         console.error(error);
       } finally {
-        // console.info(this.response);
+        // turns button loading animation off
         this.request.isOngoing = false;
       }
     },
 
     launchWidget() {
+      // TODO: unload the widget first before relaunching
+      // this.unloadWidget();
       console.log(`Launching widget, checkout ID: ${this.response.id}`);
 
       // check if existing widgetScript element exists in the HTML head and remove it
@@ -144,10 +141,23 @@ export default {
       document.querySelector("head").append(widgetScript);
 
       // apply customizations to the wpwlOptions object
-      wpwlOptions.style = this.selectedStyle;
       wpwlOptions = this.wpwlOptions;
-      let widgetCustomizations = document.createElement("script");
-      widgetCustomizations;
+      console.info("Widget customization: ", wpwlOptions);
+
+      // check if existing widget-form-container element exists in the HTML body and remove it
+      const checkWdigetFormContainer = document.getElementById(
+        "widget-form-container"
+      );
+
+      if (document.body.contains(checkWdigetFormContainer)) {
+        console.info("widget-form-container already exists, removing now.");
+        checkWdigetFormContainer.remove();
+      }
+
+      // create new div element - widget-form-container
+      let widgetFormContainer = document.createElement("div");
+      widgetFormContainer.id = "widget-form-container";
+      document.getElementById("form-goes-here").append(widgetFormContainer);
 
       // create and add the form to the html body
       let widgetForm = document.createElement("form");
@@ -155,9 +165,10 @@ export default {
         "action",
         "https://docs.oppwa.com/tutorials/integration-guide"
       );
+      widgetForm.setAttribute("id", "widget-form");
       widgetForm.setAttribute("class", "paymentWidgets");
       widgetForm.setAttribute("data-brands", "VISA MASTER");
-      document.getElementById("form-goes-here").append(widgetForm);
+      document.getElementById("widget-form-container").append(widgetForm);
     },
   },
 
@@ -233,7 +244,7 @@ export default {
           <label class="label is-small">Style</label>
           <div class="control">
             <div class="select is-small is-dark is-fullwidth">
-              <select class="raleway" v-model="selectedStyle">
+              <select class="raleway" v-model="wpwlOptions.style">
                 <option>card</option>
                 <option>logos</option>
                 <option>plain</option>
