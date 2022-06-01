@@ -4,7 +4,6 @@ import CopyandPay from "./views/CopyandPay.vue";
 import ServertoServer from "./views/ServertoServer.vue";
 import Reporting from "./views/Reporting.vue";
 import ResultPage from "./views/ResultPage.vue";
-import NotFound from "./views/NotFound.vue";
 
 // basic routes
 const routes = {
@@ -22,7 +21,6 @@ export default {
     ServertoServer,
     Reporting,
     ResultPage,
-    NotFound,
   },
 
   data() {
@@ -60,6 +58,10 @@ export default {
           this.updateSelectedTab(true, false, false, false);
           break;
 
+        case "#/":
+          this.updateSelectedTab(true, false, false, false);
+          break;
+
         case "#/copyandpay":
           this.updateSelectedTab(true, false, false, false);
           break;
@@ -77,7 +79,7 @@ export default {
           break;
 
         default:
-          this.updateSelectedTab(false, false, false, false);
+          this.updateSelectedTab(false, false, false, true); // select the result page tab on default
           break;
       }
     },
@@ -85,8 +87,9 @@ export default {
 
   computed: {
     // returns the name of the component depending on the URL route
+    // return the ResultPage as redirect
     currentView() {
-      return routes[this.currentPath.slice(1) || "/"] || NotFound;
+      return routes[this.currentPath.slice(1) || "/"] || ResultPage;
     },
   },
 
@@ -104,7 +107,8 @@ export default {
 </script>
 
 <template>
-  <div class="tabs is-centered is-boxed">
+  <!-- tabs -->
+  <div class="tabs is-boxed">
     <ul>
       <li :class="{ 'is-active': tabs.copyandpay }">
         <a
@@ -137,6 +141,7 @@ export default {
     </ul>
   </div>
 
+  <!-- swapping component views -->
   <KeepAlive>
     <component :is="currentView" />
   </KeepAlive>

@@ -77,6 +77,11 @@ export default {
         showLabels: true,
         showPlaceholders: true,
       },
+
+      disableButtons: {
+        btnRG: false,
+        btnCOF: false,
+      },
     };
   },
 
@@ -88,6 +93,22 @@ export default {
       this.request.defaultParameters.push(
         `merchantTransactionId=test_transaction_${nanoid()}`
       );
+    },
+
+    addRGParam() {
+      this.request.defaultParameters.push(`createRegistration=true`);
+      this.request.frontEndParameters = this.processParameters;
+
+      this.disableButtons.btnRG = true;
+    },
+
+    addCOFParams() {
+      this.request.defaultParameters.push(`standingInstruction.mode=INITIAL`);
+      this.request.defaultParameters.push(`standingInstruction.type=RECURRING`);
+      this.request.defaultParameters.push(`standingInstruction.source=CIT`);
+      this.request.frontEndParameters = this.processParameters;
+
+      this.disableButtons.btnCOF = true;
     },
 
     /**
@@ -178,7 +199,7 @@ export default {
       let widgetForm = document.createElement("form");
       widgetForm.setAttribute(
         "action",
-        "https://docs.oppwa.com/tutorials/integration-guide"
+        "http://localhost/oppwa-v2/dist/#/resultpage"
       );
       widgetForm.setAttribute("id", "widget-form");
       widgetForm.setAttribute("class", "paymentWidgets");
@@ -212,10 +233,6 @@ export default {
 </script>
 
 <template>
-  <p class="title">{{ title }}</p>
-  <p class="sub">{{ subTitle }}</p>
-  <hr />
-
   <div class="columns">
     <!-- left column -->
     <div class="column">
@@ -242,6 +259,24 @@ export default {
         :placeholder="processParameters"
         v-model="request.frontEndParameters"
       />
+
+      <!-- add extra params -->
+      <div class="buttons has-addons is-centered">
+        <button
+          class="button is-small is-rounded is-dark raleway"
+          @click="addRGParam"
+          :disabled="disableButtons.btnRG"
+        >
+          Create Registration
+        </button>
+        <button
+          class="button is-small is-rounded is-dark raleway"
+          @click="addCOFParams"
+          :disabled="disableButtons.btnCOF"
+        >
+          Add COF
+        </button>
+      </div>
     </div>
 
     <!-- right column -->
