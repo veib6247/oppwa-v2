@@ -8,6 +8,7 @@ import FormInput from "../components/FormInput.vue";
 import FormButton from "../components/FormButton.vue";
 import FormSwitch from "../components/FormSwitch.vue";
 import TextData from "../components/TextData.vue";
+import TextNotif from "../components/TextNotif.vue";
 import FormDisplayResponse from "../components/FormDisplayResponse.vue";
 import Notification from "../components/Notification.vue";
 
@@ -24,6 +25,7 @@ export default {
     FormButton,
     FormSwitch,
     TextData,
+    TextNotif,
     FormDisplayResponse,
     Notification,
   },
@@ -254,6 +256,12 @@ export default {
       <div class="box">
         <h4>Widget Customizations</h4>
         <hr />
+        
+        <TextNotif
+          notif-description="This app does not have JQuery installed. Please
+          manually reload the page if your desired widget setting isn't loading
+          properly."
+        />
 
         <div class="field">
           <label class="label is-small">Style</label>
@@ -314,12 +322,6 @@ export default {
           label="Auto-launch the widget if a checkout ID is generated successfully."
           v-model="autoLaunchWidget"
         />
-
-        <div class="notification is-info is-light raleway is-size-7">
-          This app does <strong>not</strong> have JQuery installed. Please
-          manually reload the page if your desired widget setting isn't loading
-          properly.
-        </div>
       </div>
     </div>
   </div>
