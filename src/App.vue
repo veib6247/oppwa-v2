@@ -1,24 +1,50 @@
 <script>
 // import individual components
 import CopyandPay from "./views/CopyandPay.vue";
+import ResultPage from "./views/ResultPage.vue";
+import NotFound from "./views/NotFound.vue";
+
+// basic routes
+const routes = {
+  "/": CopyandPay,
+  "/copyandpay": CopyandPay,
+  "/resultpage": ResultPage,
+};
 
 export default {
-  // component registration
+  // views components registration
   components: {
     CopyandPay,
+    ResultPage,
+    NotFound,
   },
 
-  // data
   data() {
     return {
-      msg: "Main App Here",
+      currentPath: window.location.hash,
     };
+  },
+
+  computed: {
+    // returns the name of the component depending on the URL route
+    currentView() {
+      return routes[this.currentPath.slice(1) || "/"] || NotFound;
+    },
+  },
+
+  // when mounted, return current URL
+  mounted() {
+    window.addEventListener("hashchange", () => {
+      this.currentPath = window.location.hash;
+    });
   },
 };
 </script>
 
 <template>
-  <CopyandPay />
+  <KeepAlive>
+    <component :is="currentView" />
+  </KeepAlive>
 </template>
 
 <style>
