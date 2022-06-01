@@ -72,7 +72,7 @@ export default {
           this.updateSelectedTab(false, false, true, false);
           break;
 
-        case "#/reporting":
+        case "#/resultpage":
           this.updateSelectedTab(false, false, false, true);
           break;
 
