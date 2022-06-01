@@ -40,7 +40,7 @@ export default {
       endPointHelper:
         "When sending requests to a live environment, change the subdomain to 'eu-prod'",
       accessTokenHelper:
-        "Access token can be taken from the backend UI under Administration > Account data > Merchant / Channel Info only if you have specific administration rights.",
+        "The access token can be taken from the backend UI under Administration > Account data > Merchant / Channel Info only if you have specific administration rights.",
 
       // request variable only here
       request: {
@@ -242,29 +242,13 @@ export default {
         :placeholder="processParameters"
         v-model="request.frontEndParameters"
       />
-
-      <!-- generate checkout ID button -->
-      <FormButton
-        button-label="Generate Checkout ID"
-        :is-loading="request.isOngoing"
-        @submit-data="generateCheckoutId"
-      />
     </div>
 
     <!-- right column -->
     <div class="column">
+      <label class="label">Style</label>
       <div class="box">
-        <h4>Widget Customizations</h4>
-        <hr />
-        
-        <TextNotif
-          notif-description="This app does not have JQuery installed. Please
-          manually reload the page if your desired widget setting isn't loading
-          properly."
-        />
-
         <div class="field">
-          <label class="label is-small">Style</label>
           <div class="control">
             <div class="select is-small is-dark is-fullwidth">
               <select class="raleway" v-model="wpwlOptions.style">
@@ -275,9 +259,11 @@ export default {
             </div>
           </div>
         </div>
+      </div>
 
-        <label class="label is-small">Widget Behavior</label>
+      <label class="label">Widget Behavior</label>
 
+      <div class="box">
         <FormSwitch
           id="requireCvv"
           label="requireCvv - Determine whether the CVV field is presented on the payment form."
@@ -313,9 +299,11 @@ export default {
           label="showPlaceholders - Shows or hides input placeholders. Default is true."
           v-model="wpwlOptions.showPlaceholders"
         />
+      </div>
 
-        <label class="label is-small">Internal Testing Behavior</label>
+      <label class="label">Internal Testing Behavior</label>
 
+      <div class="box">
         <!-- auto-launch the widget if checkout id is good -->
         <FormSwitch
           id="autoSwitch"
@@ -323,8 +311,26 @@ export default {
           v-model="autoLaunchWidget"
         />
       </div>
+
+      <TextNotif color-type="is-info"
+        >This app does <strong>not</strong> have JQuery installed. Please
+        manually reload the page if your desired customization isn't loading
+        properly.</TextNotif
+      >
     </div>
   </div>
+
+  <!-- level to keep button centered -->
+  <nav class="level">
+    <div class="level-item">
+      <!-- generate checkout ID button -->
+      <FormButton
+        button-label="Generate Checkout ID"
+        :is-loading="request.isOngoing"
+        @submit-data="generateCheckoutId"
+      />
+    </div>
+  </nav>
 
   <Notification
     :notif-description="result.description"

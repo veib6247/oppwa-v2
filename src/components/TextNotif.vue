@@ -1,7 +1,7 @@
 <script>
 export default {
   props: {
-    notifDescription: {
+    colorType: {
       type: String,
       required: true,
     },
@@ -10,7 +10,7 @@ export default {
 </script>
 
 <template>
-  <div class="notification is-info is-light raleway is-size-7">
-    {{ notifDescription }} Ahoy
+  <div class="notification is-light raleway is-size-7" :class="colorType">
+    <slot></slot>
   </div>
 </template>
