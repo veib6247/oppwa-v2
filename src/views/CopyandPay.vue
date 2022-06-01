@@ -79,12 +79,18 @@ export default {
   },
 
   methods: {
+    /**
+     * use nanoid and push ID to array a the transaction ID
+     */
     generateTransactionId() {
       this.request.defaultParameters.push(
         `merchantTransactionId=test_transaction_${nanoid()}`
       );
     },
 
+    /**
+     * hit API to get a checkout ID
+     */
     async generateCheckoutId() {
       // clear current response
       this.response = "";
@@ -108,7 +114,7 @@ export default {
 
         // if checkout id is generated successfully and
         // check with autolaunch is enabled
-        if (this.response.id) if (this.autoLaunchWidget) this.launchWidget();
+        if (this.response.id && this.autoLaunchWidget) this.launchWidget();
       } catch (error) {
         console.error(error);
       } finally {

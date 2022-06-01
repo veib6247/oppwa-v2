@@ -18,10 +18,10 @@ export default {
     class="notification raleway"
     :class="{ 'is-danger is-light': resultCode !== '000.200.100' }"
   >
-    <p class="title is-size-6">{{ resultCode }}</p>
-    <p class="subtitle is-size-6">
+    <p class="title is-size-6">
       {{ notifDescription }}
     </p>
+    <p class="subtitle is-size-6">{{ resultCode }}</p>
     <slot></slot>
   </div>
 </template>
