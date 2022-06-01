@@ -64,7 +64,7 @@ export default {
       response: "",
       result: "",
 
-      autoLaunchWidget: true,
+      autoLaunchWidget: false,
 
       wpwlOptions: {
         style: "card",
@@ -120,13 +120,20 @@ export default {
     launchWidget() {
       // TODO: unload the widget first before relaunching
       // this.unloadWidget();
-      console.log(`Launching widget, checkout ID: ${this.response.id}`);
 
+      this.createWidgetScriptTag();
+
+      wpwlOptions = this.wpwlOptions; // apply customizations to the wpwlOptions object
+
+      this.createWidgetFormContainer();
+    },
+
+    createWidgetScriptTag() {
       // check if existing widgetScript element exists in the HTML head and remove it
       const checkElement = document.getElementById("widget-script-tag");
 
       if (document.head.contains(checkElement)) {
-        console.info("widget-script-tag element already exists, removing now.");
+        console.info("widget-script-tag element exists, removing now.");
         document.head.removeChild(checkElement);
       }
 
@@ -138,19 +145,19 @@ export default {
       // get subdomain of endpoint and prefix to the src
       const subDomain = this.request.endPoint.split(".")[0];
       widgetScript.src = `${subDomain}.oppwa.com/v1/paymentWidgets.js?checkoutId=${this.response.id}`;
+
+      // append to head
       document.querySelector("head").append(widgetScript);
+    },
 
-      // apply customizations to the wpwlOptions object
-      wpwlOptions = this.wpwlOptions;
-      console.info("Widget customization: ", wpwlOptions);
-
+    createWidgetFormContainer() {
       // check if existing widget-form-container element exists in the HTML body and remove it
       const checkWdigetFormContainer = document.getElementById(
         "widget-form-container"
       );
 
       if (document.body.contains(checkWdigetFormContainer)) {
-        console.info("widget-form-container already exists, removing now.");
+        // console.info("widget-form-container already exists, removing now.");
         checkWdigetFormContainer.remove();
       }
 
@@ -168,6 +175,8 @@ export default {
       widgetForm.setAttribute("id", "widget-form");
       widgetForm.setAttribute("class", "paymentWidgets");
       widgetForm.setAttribute("data-brands", "VISA MASTER");
+
+      // append to container
       document.getElementById("widget-form-container").append(widgetForm);
     },
   },
@@ -299,6 +308,12 @@ export default {
           label="Auto-launch the widget if a checkout ID is generated successfully."
           v-model="autoLaunchWidget"
         />
+
+        <div class="notification is-info is-light raleway is-size-7">
+          This app does <strong>not</strong> have JQuery installed. Please
+          manually reload the page if your desired widget setting isn't loading
+          properly.
+        </div>
       </div>
     </div>
   </div>
