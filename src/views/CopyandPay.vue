@@ -30,7 +30,6 @@ export default {
     Notification,
   },
 
-  //
   data() {
     return {
       // page related details
@@ -66,7 +65,7 @@ export default {
       response: "",
       result: "",
 
-      autoLaunchWidget: false,
+      autoLaunchWidget: true,
 
       wpwlOptions: {
         style: "card",
@@ -267,7 +266,7 @@ export default {
           @click="addRGParam"
           :disabled="disableButtons.btnRG"
         >
-          Create Registration
+          Add Create Registration
         </button>
         <button
           class="button is-small is-rounded is-dark raleway"
