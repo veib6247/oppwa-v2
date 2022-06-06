@@ -28,7 +28,12 @@ export default {
       <section class="modal-card-body">
         <slot></slot>
       </section>
-      <footer class="modal-card-foot"></footer>
+      <footer class="modal-card-foot">
+        <p>
+          Closing this window will automatically reset the page to properly
+          reload the widget because JQuery is not installed.
+        </p>
+      </footer>
     </div>
   </div>
 </template>
