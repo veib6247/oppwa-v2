@@ -25,7 +25,7 @@ export default {
     <div class="control">
       <textarea
         class="textarea is-small mono"
-        rows="21"
+        rows="17"
         spellcheck="false"
         :placeholder="placeholder"
         :value="modelValue"

@@ -62,6 +62,7 @@ export default {
         isOngoing: false,
       },
 
+      shopperResultURL: "",
       response: "",
       result: "",
 
@@ -196,16 +197,23 @@ export default {
 
       // create and add the form to the html body
       let widgetForm = document.createElement("form");
-      widgetForm.setAttribute(
-        "action",
-        "http://localhost/oppwa-v2/dist/ResultPage.html"
-      );
+      widgetForm.setAttribute("action", this.shopperResultURL);
       widgetForm.setAttribute("id", "widget-form");
       widgetForm.setAttribute("class", "paymentWidgets");
       widgetForm.setAttribute("data-brands", "VISA MASTER");
 
       // append to container
       document.getElementById("widget-form-container").append(widgetForm);
+    },
+
+    getResultURL() {
+      // entire URL
+      const currentURL = new URL(window.location.href);
+
+      // console.info(currentURL);
+
+      // set the shopper result URL
+      this.shopperResultURL = `${currentURL.origin}${currentURL.pathname}ResultPage.html`;
     },
   },
 
@@ -222,6 +230,8 @@ export default {
   },
 
   mounted() {
+    this.getResultURL();
+
     // generate new merchantTransactionId for every page load
     this.generateTransactionId();
 
@@ -250,6 +260,13 @@ export default {
         placeholder="OGE4Mjk0MTc0YjdlY2IyODAxNGI5Njk5MjIwMDE1Y2N8c3k2S0pzVDg="
         :helper="accessTokenHelper"
         v-model="request.authToken"
+      />
+
+      <!-- shopperResultURL -->
+      <FormInput
+        label="Shopper Result URL"
+        helper="The user is redirected to this page after clicking the Pay Now button on the widget."
+        v-model="shopperResultURL"
       />
 
       <!-- PARAMS -->
