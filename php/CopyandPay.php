@@ -1,21 +1,33 @@
 <?php
+// Start the session
+session_start();
+
 // read posted data
 $post = file_get_contents('php://input');
 
 // parse json string to object
 $data_object = json_decode($post);
 
+// Set session variables
+$_SESSION["accessToken"] = $data_object->authToken;
+$_SESSION["parameters"] = $data_object->parameters;
+
+$responseData = request($data_object->endPoint, $data_object->parameters, $data_object->authToken);
+
+echo $responseData;
+
 function request($url, $data, $accessToken)
 {
-
     $ch = curl_init();
 
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Authorization:Bearer ' . $accessToken));
-    curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt_array($ch, array(
+        CURLOPT_URL => $url,
+        CURLOPT_HTTPHEADER => array('Authorization:Bearer ' . $accessToken),
+        CURLOPT_POST => 1,
+        CURLOPT_POSTFIELDS => $data,
+        CURLOPT_SSL_VERIFYPEER => true,
+        CURLOPT_RETURNTRANSFER => true
+    ));
 
     $responseData = curl_exec($ch);
 
@@ -27,7 +39,3 @@ function request($url, $data, $accessToken)
 
     return $responseData;
 }
-
-$responseData = request($data_object->endPoint, $data_object->parameters, $data_object->authToken);
-
-echo $responseData;
