@@ -198,7 +198,7 @@ export default {
       let widgetForm = document.createElement("form");
       widgetForm.setAttribute(
         "action",
-        "http://localhost/oppwa-v2/dist/#/resultpage"
+        "http://localhost/oppwa-v2/dist/ResultPage.html"
       );
       widgetForm.setAttribute("id", "widget-form");
       widgetForm.setAttribute("class", "paymentWidgets");

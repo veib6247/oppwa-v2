@@ -2,7 +2,10 @@
   "name": "oppwa-v2",
   "version": "1.0.0",
   "description": "",
-  "source": "src/index.html",
+  "source": [
+    "src/index.html",
+    "src/ResultPage.html"
+  ],
   "scripts": {
     "watch": "parcel watch --public-url ./",
     "build": "parcel build --public-url ./"

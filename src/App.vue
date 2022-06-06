@@ -3,7 +3,6 @@
 import CopyandPay from "./views/CopyandPay.vue";
 import ServertoServer from "./views/ServertoServer.vue";
 import Reporting from "./views/Reporting.vue";
-import ResultPage from "./views/ResultPage.vue";
 
 // basic routes
 const routes = {
@@ -11,7 +10,6 @@ const routes = {
   "/copyandpay": CopyandPay,
   "/servertoserver": ServertoServer,
   "/reporting": Reporting,
-  "/resultpage": ResultPage,
 };
 
 export default {
@@ -20,7 +18,6 @@ export default {
     CopyandPay,
     ServertoServer,
     Reporting,
-    ResultPage,
   },
 
   data() {
@@ -39,11 +36,10 @@ export default {
     /**
      * set boolean values for which tab should be active mode
      */
-    updateSelectedTab(copyandpay, servertoserver, reporting, resultpage) {
+    updateSelectedTab(copyandpay, servertoserver, reporting) {
       this.tabs.copyandpay = copyandpay;
       this.tabs.servertoserver = servertoserver;
       this.tabs.reporting = reporting;
-      this.tabs.resultpage = resultpage;
     },
 
     setSelectedTab() {
@@ -55,31 +51,27 @@ export default {
 
       switch (currentHash) {
         case "":
-          this.updateSelectedTab(true, false, false, false);
+          this.updateSelectedTab(true, false, false);
           break;
 
         case "#/":
-          this.updateSelectedTab(true, false, false, false);
+          this.updateSelectedTab(true, false, false);
           break;
 
         case "#/copyandpay":
-          this.updateSelectedTab(true, false, false, false);
+          this.updateSelectedTab(true, false, false);
           break;
 
         case "#/servertoserver":
-          this.updateSelectedTab(false, true, false, false);
+          this.updateSelectedTab(false, true, false);
           break;
 
         case "#/reporting":
-          this.updateSelectedTab(false, false, true, false);
-          break;
-
-        case "#/resultpage":
-          this.updateSelectedTab(false, false, false, true);
+          this.updateSelectedTab(false, false, true);
           break;
 
         default:
-          this.updateSelectedTab(false, false, false, true); // select the result page tab on default
+          this.updateSelectedTab(true, false, false); // select cnp tab on default
           break;
       }
     },
@@ -89,7 +81,7 @@ export default {
     // returns the name of the component depending on the URL route
     // return the ResultPage as redirect
     currentView() {
-      return routes[this.currentPath.slice(1) || "/"] || ResultPage;
+      return routes[this.currentPath.slice(1) || "/"] || CopyandPay;
     },
   },
 
@@ -129,13 +121,6 @@ export default {
           href="#/reporting"
           @click="updateSelectedTab(false, false, true, false)"
           >Reporting API</a
-        >
-      </li>
-      <li :class="{ 'is-active': tabs.resultpage }">
-        <a
-          href="#/resultpage"
-          @click="updateSelectedTab(false, false, false, true)"
-          >Result Page</a
         >
       </li>
     </ul>
