@@ -8,7 +8,7 @@
   ],
   "scripts": {
     "watch": "parcel watch --public-url ./",
-    "build": "parcel build --public-url ./"
+    "build": "parcel build --public-url ./ --dist-dir build"
   },
   "keywords": [],
   "author": "",

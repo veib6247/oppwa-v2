@@ -11,6 +11,7 @@ import TextData from "../components/TextData.vue";
 import TextNotif from "../components/TextNotif.vue";
 import FormDisplayResponse from "../components/FormDisplayResponse.vue";
 import Notification from "../components/Notification.vue";
+import Modal from "../components/Modal.vue";
 
 // this will allow parcel to include the php file in the build process so that everything is in 1 directory
 const copyAndPayScriptPath = require("url:../../php/CopyandPay.php");
@@ -28,19 +29,11 @@ export default {
     TextNotif,
     FormDisplayResponse,
     Notification,
+    Modal,
   },
 
   data() {
     return {
-      // page related details
-      title: "Copy and Pay",
-      subTitle:
-        "COPYandPAY is a SAQ-A compliant payment-form solution, making it both secure and simple-to-integrate.",
-      endPointHelper:
-        "When sending requests to a live environment, change the subdomain to 'eu-prod'",
-      accessTokenHelper:
-        "The access token can be taken from the backend UI under Administration > Account data > Merchant / Channel Info only if you have specific administration rights.",
-
       // request variable only here
       request: {
         endPoint: "https://eu-test.oppwa.com/v1/checkouts",
@@ -67,6 +60,7 @@ export default {
       result: "",
 
       autoLaunchWidget: true,
+      showModal: false,
 
       wpwlOptions: {
         style: "card",
@@ -204,6 +198,8 @@ export default {
 
       // append to container
       document.getElementById("widget-form-container").append(widgetForm);
+
+      this.showModal = true;
     },
 
     getResultURL() {
@@ -214,6 +210,11 @@ export default {
 
       // set the shopper result URL
       this.shopperResultURL = `${currentURL.origin}${currentURL.pathname}ResultPage.html`;
+    },
+
+    closeWidget() {
+      console.log("closing widget now");
+      location.reload(true);
     },
   },
 
@@ -249,7 +250,7 @@ export default {
       <FormInput
         label="API Endpoint"
         placeholder="https://eu-test.oppwa.com/v1/checkouts"
-        :helper="endPointHelper"
+        helper="When sending requests to a live environment, change the subdomain to eu-prod"
         v-model="request.endPoint"
       />
 
@@ -258,7 +259,7 @@ export default {
         label="Access Token"
         type="password"
         placeholder="OGE4Mjk0MTc0YjdlY2IyODAxNGI5Njk5MjIwMDE1Y2N8c3k2S0pzVDg="
-        :helper="accessTokenHelper"
+        helper="The access token can be taken from the backend UI under Administration > Account data > Merchant / Channel Info only if you have specific administration rights."
         v-model="request.authToken"
       />
 
@@ -370,11 +371,11 @@ export default {
         />
       </div>
 
-      <TextNotif color-type="is-info"
-        >This app does <strong>not</strong> have JQuery installed. Please
+      <TextNotif color-type="is-info">
+        This app does <strong>not</strong> have JQuery installed. Please
         manually reload the page if your desired customization isn't loading
-        properly.</TextNotif
-      >
+        properly.
+      </TextNotif>
     </div>
   </div>
 
@@ -409,6 +410,12 @@ export default {
     />
   </Notification>
 
-  <!-- widget here -->
-  <div id="form-goes-here"></div>
+  <Modal
+    :is-active="showModal"
+    title="CopyandPay Widget"
+    @close-action="closeWidget"
+  >
+    <!-- widget here -->
+    <div id="form-goes-here"></div>
+  </Modal>
 </template>

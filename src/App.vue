@@ -43,7 +43,7 @@ export default {
     },
 
     setSelectedTab() {
-      currentHash = window.location.hash;
+      let currentHash = window.location.hash;
 
       if (currentHash !== "") {
         console.info(`Routing to ${currentHash}`);
