@@ -5,6 +5,12 @@ export default {
       type: String,
       required: true,
     },
+
+    functionName: {
+      type: String,
+      required: true,
+    },
+
     label: {
       type: String,
       required: true,
@@ -29,7 +35,9 @@ export default {
         :checked="modelValue"
         @input="$emit('update:modelValue', $event.target.checked)"
       />
-      <label :for="id">{{ label }}</label>
+      <label :for="id"
+        ><strong>{{ functionName }}</strong> - {{ label }}</label
+      >
     </div>
   </div>
 </template>

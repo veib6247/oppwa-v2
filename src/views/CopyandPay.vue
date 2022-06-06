@@ -317,37 +317,43 @@ export default {
       <div class="box">
         <FormSwitch
           id="requireCvv"
-          label="requireCvv - Determine whether the CVV field is presented on the payment form."
+          function-name="Require CVV"
+          label="Determine whether the CVV field is presented on the payment form."
           v-model="wpwlOptions.requireCvv"
         />
 
         <FormSwitch
           id="allowEmptyCvv"
-          label="allowEmptyCvv - Determines whether the CVV field can be empty. By default it is false."
+          function-name="Allow Empty CVV"
+          label="Determines whether the CVV field can be empty. By default it is false."
           v-model="wpwlOptions.allowEmptyCvv"
         />
 
         <FormSwitch
           id="showCVVHint"
-          label="showCVVHint - If set to true then the credit card form will display a hint on where the CVV is located when the mouse is hovering over the CVV field."
+          function-name="Show CVV Hint"
+          label="If set to true then the credit card form will display a hint on where the CVV is located when the mouse is hovering over the CVV field."
           v-model="wpwlOptions.showCVVHint"
         />
 
         <FormSwitch
           id="validation"
-          label="validation - Use validation. If false, it disables validation and the functions 'validate' and 'on Submit' will not be called."
+          function-name="Validation"
+          label="If false, it disables validation and the functions 'validate' and 'on Submit' will not be called."
           v-model="wpwlOptions.validation"
         />
 
         <FormSwitch
           id="showLabels"
-          label="showLabels - Shows or hides input labels. Default is true."
+          function-name="Show Labels"
+          label="Shows or hides input labels. Default is true."
           v-model="wpwlOptions.showLabels"
         />
 
         <FormSwitch
           id="showPlaceholders"
-          label="showPlaceholders - Shows or hides input placeholders. Default is true."
+          function-name="Show Placeholders"
+          label="Shows or hides input placeholders. Default is true."
           v-model="wpwlOptions.showPlaceholders"
         />
       </div>
@@ -358,7 +364,8 @@ export default {
         <!-- auto-launch the widget if checkout id is good -->
         <FormSwitch
           id="autoSwitch"
-          label="Auto-launch the widget if a checkout ID is generated successfully."
+          function-name="Auto-launch Widget"
+          label="Launches the widget if a checkout ID is generated successfully."
           v-model="autoLaunchWidget"
         />
       </div>
