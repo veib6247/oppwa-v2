@@ -28,6 +28,7 @@ export default {
       <section class="modal-card-body">
         <slot></slot>
       </section>
+      <footer class="modal-card-foot"></footer>
     </div>
   </div>
 </template>
