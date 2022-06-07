@@ -252,204 +252,230 @@ export default {
 </script>
 
 <template>
-  <!-- ENDPOINT -->
-  <FormInput
-    label="API Endpoint"
-    placeholder="https://eu-test.oppwa.com/v1/checkouts"
-    helper="When sending requests to a live environment, change the subdomain to eu-prod"
-    v-model="request.endPoint"
-  />
+  <div class="box">
+    <!-- ENDPOINT -->
+    <FormInput
+      label="API Endpoint"
+      placeholder="https://eu-test.oppwa.com/v1/checkouts"
+      helper="When sending requests to a live environment, change the subdomain to eu-prod"
+      v-model="request.endPoint"
+    />
 
-  <!-- TOKEN -->
-  <FormInput
-    label="Access Token"
-    type="password"
-    placeholder="OGE4Mjk0MTc0YjdlY2IyODAxNGI5Njk5MjIwMDE1Y2N8c3k2S0pzVDg="
-    helper="The access token can be taken from the backend UI under Administration > Account data > Merchant / Channel Info only if you have specific administration rights."
-    v-model="request.authToken"
-  />
+    <!-- TOKEN -->
+    <FormInput
+      label="Access Token"
+      type="password"
+      placeholder="OGE4Mjk0MTc0YjdlY2IyODAxNGI5Njk5MjIwMDE1Y2N8c3k2S0pzVDg="
+      helper="The access token can be taken from the backend UI under Administration > Account data > Merchant / Channel Info only if you have specific administration rights."
+      v-model="request.authToken"
+    />
 
-  <!-- shopperResultURL -->
-  <FormInput
-    label="Shopper Result URL"
-    helper="The user is redirected to this page after clicking the Pay Now button on the widget."
-    v-model="shopperResultURL"
-  />
+    <!-- shopperResultURL -->
+    <FormInput
+      label="Shopper Result URL"
+      helper="The user is redirected to this page after clicking the Pay Now button on the widget."
+      v-model="shopperResultURL"
+    />
 
-  <!-- PARAMS -->
-  <TextData
-    label="Data Parameters"
-    :placeholder="processParameters"
-    v-model="request.frontEndParameters"
-  />
+    <!-- PARAMS -->
+    <TextData
+      label="Data Parameters"
+      :placeholder="processParameters"
+      v-model="request.frontEndParameters"
+    />
 
-  <nav class="level">
-    <div class="level-left">
-      <div class="level-item">
-        <!-- add extra params -->
-        <div class="buttons has-addons">
-          <button
-            class="button is-small is-rounded is-dark raleway"
-            @click="addRGParam"
-            :disabled="disableButtons.btnRG"
-          >
-            ADD - Create Registration
-          </button>
-          <button
-            class="button is-small is-rounded is-dark raleway"
-            @click="addCOFParams"
-            :disabled="disableButtons.btnCOF"
-          >
-            ADD - COF
-          </button>
+    <nav class="level">
+      <div class="level-left">
+        <div class="level-item">
+          <!-- add extra params -->
+          <div class="buttons has-addons">
+            <button
+              class="button is-small is-rounded is-dark raleway"
+              @click="addRGParam"
+              :disabled="disableButtons.btnRG"
+            >
+              ADD - Create Registration
+            </button>
+            <button
+              class="button is-small is-rounded is-dark raleway"
+              @click="addCOFParams"
+              :disabled="disableButtons.btnCOF"
+            >
+              ADD - COF
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="level-right">
-      <FormButton
-        button-label="Show Widget Customization Window"
-        @submit-data="showCustomizationModal = !showCustomizationModal"
-      />
-    </div>
-  </nav>
+      <div class="level-right">
+        <FormButton
+          button-label="Show Widget Customization Window"
+          button-size="is-small"
+          @submit-data="showCustomizationModal = !showCustomizationModal"
+        />
+      </div>
+    </nav>
 
-  <!-- level to keep button centered -->
-  <nav class="level">
-    <div class="level-item">
+    <br />
+    <!-- level to keep button centered -->
+    <nav class="level">
+      <div class="level-item">
+        <!-- generate checkout ID button -->
+        <FormButton
+          button-label="Generate Checkout ID"
+          :is-loading="request.isOngoing"
+          @submit-data="generateCheckoutId"
+        />
+      </div>
+    </nav>
+
+    <!-- display response for checkout ID generation -->
+    <Notification
+      :notif-description="result.description"
+      :result-code="result.code"
+      v-if="result.code"
+    >
+      <FormDisplayResponse
+        label="Complete JSON Response"
+        :data="response"
+        v-if="response"
+      />
       <!-- generate checkout ID button -->
       <FormButton
-        button-label="Generate Checkout ID"
-        :is-loading="request.isOngoing"
-        @submit-data="generateCheckoutId"
+        button-label="Launch CopyandPay Widget"
+        v-if="response.id && !autoLaunchWidget"
+        @submit-data="launchWidget"
       />
-    </div>
-  </nav>
+    </Notification>
 
-  <!-- display response for checkout ID generation -->
-  <Notification
-    :notif-description="result.description"
-    :result-code="result.code"
-    v-if="result.code"
-  >
-    <FormDisplayResponse
-      label="Complete JSON Response"
-      :data="response"
-      v-if="response"
-    />
-    <!-- generate checkout ID button -->
-    <FormButton
-      button-label="Launch CopyandPay Widget"
-      v-if="response.id && !autoLaunchWidget"
-      @submit-data="launchWidget"
-    />
-  </Notification>
-
-  <!-- modal that displays the available widget customizations -->
-  <Modal
-    :is-active="showCustomizationModal"
-    title="Widget Customization"
-    @close-action="showCustomizationModal = !showCustomizationModal"
-  >
-    <!-- Brand lists -->
-    <div class="field">
-      <label class="label">Brands</label>
-      <div class="control is-expanded">
-        <div class="select is-small is-fullwidth is-multiple">
-          <select class="mono" multiple size="9" v-model="selectedBrands">
-            <option v-for="brand in brandList" :key="brand">
-              {{ brand }}
-            </option>
-          </select>
+    <!-- modal that displays the available widget customizations -->
+    <Transition>
+      <Modal
+        v-show="showCustomizationModal"
+        :is-active="showCustomizationModal"
+        title="Widget Customization"
+        @close-action="showCustomizationModal = !showCustomizationModal"
+      >
+        <!-- Brand lists -->
+        <div class="field">
+          <label class="label">Brands</label>
+          <div class="control is-expanded">
+            <div class="select is-small is-fullwidth is-multiple">
+              <select class="mono" multiple size="9" v-model="selectedBrands">
+                <option v-for="brand in brandList" :key="brand">
+                  {{ brand }}
+                </option>
+              </select>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-    <text-notif color-type="is-info"
-      >Selected Brands:
-      <span v-for="brand in selectedBrands" :key="brand">"{{ brand }}", </span>
-    </text-notif>
+        <text-notif color-type="is-info"
+          >Selected Brands:
+          <span v-for="brand in selectedBrands" :key="brand"
+            >"{{ brand }}",
+          </span>
+        </text-notif>
 
-    <!-- widget style -->
-    <div class="field">
-      <label class="label">Style</label>
-      <div class="control">
-        <div class="select is-small is-dark is-fullwidth">
-          <select class="raleway" v-model="wpwlOptions.style">
-            <option>card</option>
-            <option>logos</option>
-            <option>plain</option>
-          </select>
+        <!-- widget style -->
+        <div class="field">
+          <label class="label">Style</label>
+          <div class="control">
+            <div class="select is-small is-dark is-fullwidth">
+              <select class="raleway" v-model="wpwlOptions.style">
+                <option>card</option>
+                <option>logos</option>
+                <option>plain</option>
+              </select>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
 
-    <br />
-    <label class="label">Widget Behavior (more coming soon...)</label>
-    <FormSwitch
-      id="requireCvv"
-      function-name="Require CVV"
-      label="Determine whether the CVV field is presented on the payment form."
-      v-model="wpwlOptions.requireCvv"
-    />
+        <br />
+        <label class="label">Widget Behavior (more coming soon...)</label>
+        <FormSwitch
+          id="requireCvv"
+          function-name="Require CVV"
+          label="Determine whether the CVV field is presented on the payment form."
+          v-model="wpwlOptions.requireCvv"
+        />
 
-    <FormSwitch
-      id="allowEmptyCvv"
-      function-name="Allow Empty CVV"
-      label="Determines whether the CVV field can be empty. By default it is false."
-      v-model="wpwlOptions.allowEmptyCvv"
-    />
+        <FormSwitch
+          id="allowEmptyCvv"
+          function-name="Allow Empty CVV"
+          label="Determines whether the CVV field can be empty. By default it is false."
+          v-model="wpwlOptions.allowEmptyCvv"
+        />
 
-    <FormSwitch
-      id="showCVVHint"
-      function-name="Show CVV Hint"
-      label="If set to true then the credit card form will display a hint on where the CVV is located when the mouse is hovering over the CVV field."
-      v-model="wpwlOptions.showCVVHint"
-    />
+        <FormSwitch
+          id="showCVVHint"
+          function-name="Show CVV Hint"
+          label="If set to true then the credit card form will display a hint on where the CVV is located when the mouse is hovering over the CVV field."
+          v-model="wpwlOptions.showCVVHint"
+        />
 
-    <FormSwitch
-      id="validation"
-      function-name="Validation"
-      label="If false, it disables validation and the functions 'validate' and 'on Submit' will not be called."
-      v-model="wpwlOptions.validation"
-    />
+        <FormSwitch
+          id="validation"
+          function-name="Validation"
+          label="If false, it disables validation and the functions 'validate' and 'on Submit' will not be called."
+          v-model="wpwlOptions.validation"
+        />
 
-    <FormSwitch
-      id="showLabels"
-      function-name="Show Labels"
-      label="Shows or hides input labels. Default is true."
-      v-model="wpwlOptions.showLabels"
-    />
+        <FormSwitch
+          id="showLabels"
+          function-name="Show Labels"
+          label="Shows or hides input labels. Default is true."
+          v-model="wpwlOptions.showLabels"
+        />
 
-    <FormSwitch
-      id="showPlaceholders"
-      function-name="Show Placeholders"
-      label="Shows or hides input placeholders. Default is true."
-      v-model="wpwlOptions.showPlaceholders"
-    />
+        <FormSwitch
+          id="showPlaceholders"
+          function-name="Show Placeholders"
+          label="Shows or hides input placeholders. Default is true."
+          v-model="wpwlOptions.showPlaceholders"
+        />
 
-    <br />
-    <!-- auto-launch the widget if checkout id is good -->
-    <label class="label">Internal Testing Behavior (more coming soon...)</label>
-    <FormSwitch
-      id="autoSwitch"
-      function-name="Auto-launch Widget"
-      label="Launches the widget if a checkout ID is generated successfully."
-      v-model="autoLaunchWidget"
-    />
+        <br />
+        <!-- auto-launch the widget if checkout id is good -->
+        <label class="label"
+          >Internal Testing Behavior (more coming soon...)</label
+        >
+        <FormSwitch
+          id="autoSwitch"
+          function-name="Auto-launch Widget"
+          label="Launches the widget if a checkout ID is generated successfully."
+          v-model="autoLaunchWidget"
+        />
 
-    <TextNotif color-type="is-warning">
-      This app does <strong>not</strong> have JQuery installed. Please manually
-      reload the page if your desired customization isn't loading properly.
-    </TextNotif>
-  </Modal>
+        <TextNotif color-type="is-warning">
+          This app does <strong>not</strong> have JQuery installed. Please
+          manually reload the page if your desired customization isn't loading
+          properly.
+        </TextNotif>
+      </Modal>
+    </Transition>
 
-  <!-- modal that displays the widget -->
-  <Modal
-    :is-active="showModal"
-    title="CopyandPay Widget"
-    @close-action="closeWidget"
-    footer="Closing this window will automatically reset the page to properly reload the widget because JQuery is not installed."
-  >
-    <!-- widget here -->
-    <div id="form-goes-here"></div>
-  </Modal>
+    <!-- modal that displays the widget -->
+    <Transition>
+      <Modal
+        v-show="showModal"
+        :is-active="showModal"
+        title="CopyandPay Widget"
+        @close-action="closeWidget"
+        footer="Closing this modal window will automatically reset the page to properly reload the widget."
+      >
+        <!-- widget here -->
+        <div id="form-goes-here"></div>
+      </Modal>
+    </Transition>
+  </div>
 </template>
+
+<style scoped>
+/* Generic transitions */
+.v-enter-active {
+  transition: opacity 0.5s ease;
+}
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+</style>

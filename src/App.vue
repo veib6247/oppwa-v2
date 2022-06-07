@@ -100,7 +100,7 @@ export default {
 
 <template>
   <!-- tabs -->
-  <div class="tabs is-boxed">
+  <div class="tabs">
     <ul>
       <li :class="{ 'is-active': tabs.copyandpay }">
         <a
@@ -128,7 +128,9 @@ export default {
 
   <!-- swapping component views -->
   <KeepAlive>
-    <component :is="currentView" />
+    <Transition>
+      <component :is="currentView" />
+    </Transition>
   </KeepAlive>
 </template>
 
@@ -143,5 +145,16 @@ export default {
 /** main font for all data inputs */
 .mono {
   font-family: "Red Hat Mono", monospace;
+}
+</style>
+
+<style scoped>
+/* Generic transitions */
+.v-enter-active {
+  transition: opacity 0.5s ease;
+}
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
 }
 </style>

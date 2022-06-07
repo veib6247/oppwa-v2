@@ -6,6 +6,11 @@ export default {
       default: "",
     },
 
+    buttonSize: {
+      type: String,
+      default: "is-small",
+    },
+
     isLoading: {
       type: Boolean,
       default: false,
@@ -17,8 +22,8 @@ export default {
   <div class="field">
     <div class="control">
       <button
-        class="button is-small is-dark is-rounded raleway"
-        :class="{ 'is-loading': isLoading }"
+        class="button is-dark is-rounded raleway"
+        :class="[{ 'is-loading': isLoading }, buttonSize]"
         @click="$emit('submitData')"
       >
         {{ buttonLabel }}
