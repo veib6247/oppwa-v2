@@ -3,7 +3,7 @@ export default {
   props: {
     buttonLabel: {
       type: String,
-      default: "",
+      required: true,
     },
 
     buttonSize: {

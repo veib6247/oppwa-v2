@@ -324,7 +324,7 @@ export default {
       </div>
       <div class="level-right">
         <FormButton
-          button-label="Custom"
+          button-label="Customize"
           button-icon="fas fa-cog"
           button-size="is-small"
           @submit-data="showCustomizationModal = !showCustomizationModal"
@@ -379,6 +379,13 @@ export default {
         @close-action="showCustomizationModal = !showCustomizationModal"
         @keyup.esc="showCustomizationModal = !showCustomizationModal"
       >
+        <!-- shopperResultURL -->
+        <FormInput
+          label="Shopper Result URL"
+          helper="The user is redirected to this page after clicking the Pay Now button on the widget."
+          v-model="shopperResultURL"
+        />
+
         <!-- widget style -->
         <div class="field">
           <label class="label">Style</label>
@@ -398,7 +405,7 @@ export default {
           <label class="label">Brands</label>
           <div class="control is-expanded">
             <div class="select is-small is-fullwidth is-multiple">
-              <select class="mono" multiple size="9" v-model="selectedBrands">
+              <select class="mono" multiple size="8" v-model="selectedBrands">
                 <option v-for="brand in brandList" :key="brand">
                   {{ brand }}
                 </option>
@@ -456,24 +463,11 @@ export default {
           v-model="wpwlOptions.showPlaceholders"
         />
 
-        <br />
-        <!-- auto-launch the widget if checkout id is good -->
-        <label class="label"
-          >Internal Testing Behavior (more coming soon...)</label
-        >
         <FormSwitch
           id="autoSwitch"
           function-name="Auto-launch Widget"
           label="Launches the widget if a checkout ID is generated successfully."
           v-model="autoLaunchWidget"
-        />
-
-        <br />
-        <!-- shopperResultURL -->
-        <FormInput
-          label="Shopper Result URL"
-          helper="The user is redirected to this page after clicking the Pay Now button on the widget."
-          v-model="shopperResultURL"
         />
 
         <TextNotif color-type="is-warning">

@@ -35,7 +35,7 @@ export default {
         <slot></slot>
       </section>
       <footer class="modal-card-foot">
-        <p>
+        <p class="is-size-7">
           {{ footer }}
         </p>
       </footer>

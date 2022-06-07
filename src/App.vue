@@ -124,7 +124,7 @@ export default {
       <li :class="{ 'is-active': tabs.reporting }">
         <a href="#/reporting" @click="updateSelectedTab(false, false, true)">
           <span class="icon">
-            <i class="far fa-file-alt"></i>
+            <i class="fas fa-file-alt"></i>
           </span>
           <span>Reporting API</span>
         </a>
