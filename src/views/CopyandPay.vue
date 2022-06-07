@@ -339,6 +339,7 @@ export default {
         <!-- generate checkout ID button -->
         <FormButton
           button-label="Generate Checkout ID"
+          :is-rounded="true"
           :is-loading="request.isOngoing"
           @submit-data="generateCheckoutId"
         />
@@ -347,7 +348,7 @@ export default {
 
     <!-- display error notif if response is not the expected JSON from the server -->
     <Transition>
-      <text-notif color-type="is-danger" v-if="error">
+      <text-notif class="mono" color-type="is-danger" v-if="error">
         {{ error }}
       </text-notif>
     </Transition>

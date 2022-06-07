@@ -11,6 +11,11 @@ export default {
       default: "is-small",
     },
 
+    isRounded: {
+      type: Boolean,
+      required: false,
+    },
+
     buttonIcon: {
       type: String,
       default: "fas fa-paper-plane",
@@ -27,8 +32,12 @@ export default {
   <div class="field">
     <div class="control">
       <button
-        class="button is-dark is-rounded raleway"
-        :class="[{ 'is-loading': isLoading }, buttonSize]"
+        class="button is-dark raleway"
+        :class="[
+          { 'is-loading': isLoading },
+          { 'is-rounded': isRounded },
+          buttonSize,
+        ]"
         @click="$emit('submitData')"
       >
         <span class="icon" :class="[buttonSize]">
