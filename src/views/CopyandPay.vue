@@ -1,6 +1,8 @@
 <script>
 // import utilities for string processing and etc.
-import { processParameters } from "../utils/stringProcessing";
+import { processParameters, parseBrands } from "../utils/stringProcessing";
+import { brandList } from "../utils/brandList";
+
 import { nanoid } from "nanoid";
 
 // import reusable components
@@ -61,6 +63,7 @@ export default {
 
       autoLaunchWidget: true,
       showModal: false,
+      showCustomizationModal: false,
 
       wpwlOptions: {
         style: "card",
@@ -76,6 +79,9 @@ export default {
         btnRG: false,
         btnCOF: false,
       },
+
+      brandList: "",
+      selectedBrands: ["VISA", "MASTER"],
     };
   },
 
@@ -194,7 +200,7 @@ export default {
       widgetForm.setAttribute("action", this.shopperResultURL);
       widgetForm.setAttribute("id", "widget-form");
       widgetForm.setAttribute("class", "paymentWidgets");
-      widgetForm.setAttribute("data-brands", "VISA MASTER");
+      widgetForm.setAttribute("data-brands", parseBrands(this.selectedBrands));
 
       // append to container
       document.getElementById("widget-form-container").append(widgetForm);
@@ -213,7 +219,6 @@ export default {
     },
 
     closeWidget() {
-      console.log("closing widget now");
       location.reload(true);
     },
   },
@@ -231,6 +236,10 @@ export default {
   },
 
   mounted() {
+    // set the list of brands
+    this.brandList = brandList();
+
+    // generate the return URL
     this.getResultURL();
 
     // generate new merchantTransactionId for every page load
@@ -243,141 +252,66 @@ export default {
 </script>
 
 <template>
-  <div class="columns">
-    <!-- left column -->
-    <div class="column">
-      <!-- ENDPOINT -->
-      <FormInput
-        label="API Endpoint"
-        placeholder="https://eu-test.oppwa.com/v1/checkouts"
-        helper="When sending requests to a live environment, change the subdomain to eu-prod"
-        v-model="request.endPoint"
-      />
+  <!-- ENDPOINT -->
+  <FormInput
+    label="API Endpoint"
+    placeholder="https://eu-test.oppwa.com/v1/checkouts"
+    helper="When sending requests to a live environment, change the subdomain to eu-prod"
+    v-model="request.endPoint"
+  />
 
-      <!-- TOKEN -->
-      <FormInput
-        label="Access Token"
-        type="password"
-        placeholder="OGE4Mjk0MTc0YjdlY2IyODAxNGI5Njk5MjIwMDE1Y2N8c3k2S0pzVDg="
-        helper="The access token can be taken from the backend UI under Administration > Account data > Merchant / Channel Info only if you have specific administration rights."
-        v-model="request.authToken"
-      />
+  <!-- TOKEN -->
+  <FormInput
+    label="Access Token"
+    type="password"
+    placeholder="OGE4Mjk0MTc0YjdlY2IyODAxNGI5Njk5MjIwMDE1Y2N8c3k2S0pzVDg="
+    helper="The access token can be taken from the backend UI under Administration > Account data > Merchant / Channel Info only if you have specific administration rights."
+    v-model="request.authToken"
+  />
 
-      <!-- shopperResultURL -->
-      <FormInput
-        label="Shopper Result URL"
-        helper="The user is redirected to this page after clicking the Pay Now button on the widget."
-        v-model="shopperResultURL"
-      />
+  <!-- shopperResultURL -->
+  <FormInput
+    label="Shopper Result URL"
+    helper="The user is redirected to this page after clicking the Pay Now button on the widget."
+    v-model="shopperResultURL"
+  />
 
-      <!-- PARAMS -->
-      <TextData
-        label="Data Parameters"
-        :placeholder="processParameters"
-        v-model="request.frontEndParameters"
-      />
+  <!-- PARAMS -->
+  <TextData
+    label="Data Parameters"
+    :placeholder="processParameters"
+    v-model="request.frontEndParameters"
+  />
 
-      <!-- add extra params -->
-      <div class="buttons has-addons is-centered">
-        <button
-          class="button is-small is-rounded is-dark raleway"
-          @click="addRGParam"
-          :disabled="disableButtons.btnRG"
-        >
-          Add Create Registration
-        </button>
-        <button
-          class="button is-small is-rounded is-dark raleway"
-          @click="addCOFParams"
-          :disabled="disableButtons.btnCOF"
-        >
-          Add COF
-        </button>
-      </div>
-    </div>
-
-    <!-- right column -->
-    <div class="column">
-      <label class="label">Style</label>
-      <div class="box">
-        <div class="field">
-          <div class="control">
-            <div class="select is-small is-dark is-fullwidth">
-              <select class="raleway" v-model="wpwlOptions.style">
-                <option>card</option>
-                <option>logos</option>
-                <option>plain</option>
-              </select>
-            </div>
-          </div>
+  <nav class="level">
+    <div class="level-left">
+      <div class="level-item">
+        <!-- add extra params -->
+        <div class="buttons has-addons">
+          <button
+            class="button is-small is-rounded is-dark raleway"
+            @click="addRGParam"
+            :disabled="disableButtons.btnRG"
+          >
+            ADD - Create Registration
+          </button>
+          <button
+            class="button is-small is-rounded is-dark raleway"
+            @click="addCOFParams"
+            :disabled="disableButtons.btnCOF"
+          >
+            ADD - COF
+          </button>
         </div>
       </div>
-
-      <label class="label">Widget Behavior</label>
-
-      <div class="box">
-        <FormSwitch
-          id="requireCvv"
-          function-name="Require CVV"
-          label="Determine whether the CVV field is presented on the payment form."
-          v-model="wpwlOptions.requireCvv"
-        />
-
-        <FormSwitch
-          id="allowEmptyCvv"
-          function-name="Allow Empty CVV"
-          label="Determines whether the CVV field can be empty. By default it is false."
-          v-model="wpwlOptions.allowEmptyCvv"
-        />
-
-        <FormSwitch
-          id="showCVVHint"
-          function-name="Show CVV Hint"
-          label="If set to true then the credit card form will display a hint on where the CVV is located when the mouse is hovering over the CVV field."
-          v-model="wpwlOptions.showCVVHint"
-        />
-
-        <FormSwitch
-          id="validation"
-          function-name="Validation"
-          label="If false, it disables validation and the functions 'validate' and 'on Submit' will not be called."
-          v-model="wpwlOptions.validation"
-        />
-
-        <FormSwitch
-          id="showLabels"
-          function-name="Show Labels"
-          label="Shows or hides input labels. Default is true."
-          v-model="wpwlOptions.showLabels"
-        />
-
-        <FormSwitch
-          id="showPlaceholders"
-          function-name="Show Placeholders"
-          label="Shows or hides input placeholders. Default is true."
-          v-model="wpwlOptions.showPlaceholders"
-        />
-      </div>
-
-      <label class="label">Internal Testing Behavior</label>
-
-      <div class="box">
-        <!-- auto-launch the widget if checkout id is good -->
-        <FormSwitch
-          id="autoSwitch"
-          function-name="Auto-launch Widget"
-          label="Launches the widget if a checkout ID is generated successfully."
-          v-model="autoLaunchWidget"
-        />
-      </div>
-
-      <TextNotif color-type="is-info">
-        This app does <strong>not</strong> have JQuery installed. Please
-        manually reload the page if your desired customization isn't loading
-        properly.
-      </TextNotif>
     </div>
-  </div>
+    <div class="level-right">
+      <FormButton
+        button-label="Show Widget Customization Window"
+        @submit-data="showCustomizationModal = !showCustomizationModal"
+      />
+    </div>
+  </nav>
 
   <!-- level to keep button centered -->
   <nav class="level">
@@ -391,12 +325,12 @@ export default {
     </div>
   </nav>
 
+  <!-- display response for checkout ID generation -->
   <Notification
     :notif-description="result.description"
     :result-code="result.code"
     v-if="result.code"
   >
-    <!-- display response for checkout ID generation -->
     <FormDisplayResponse
       label="Complete JSON Response"
       :data="response"
@@ -410,10 +344,110 @@ export default {
     />
   </Notification>
 
+  <!-- modal that displays the available widget customizations -->
+  <Modal
+    :is-active="showCustomizationModal"
+    title="Widget Customization"
+    @close-action="showCustomizationModal = !showCustomizationModal"
+  >
+    <!-- Brand lists -->
+    <div class="field">
+      <label class="label">Brands</label>
+      <div class="control is-expanded">
+        <div class="select is-small is-fullwidth is-multiple">
+          <select class="mono" multiple size="9" v-model="selectedBrands">
+            <option v-for="brand in brandList" :key="brand">
+              {{ brand }}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <text-notif color-type="is-info"
+      >Selected Brands:
+      <span v-for="brand in selectedBrands" :key="brand">"{{ brand }}", </span>
+    </text-notif>
+
+    <!-- widget style -->
+    <div class="field">
+      <label class="label">Style</label>
+      <div class="control">
+        <div class="select is-small is-dark is-fullwidth">
+          <select class="raleway" v-model="wpwlOptions.style">
+            <option>card</option>
+            <option>logos</option>
+            <option>plain</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <br />
+    <label class="label">Widget Behavior (more coming soon...)</label>
+    <FormSwitch
+      id="requireCvv"
+      function-name="Require CVV"
+      label="Determine whether the CVV field is presented on the payment form."
+      v-model="wpwlOptions.requireCvv"
+    />
+
+    <FormSwitch
+      id="allowEmptyCvv"
+      function-name="Allow Empty CVV"
+      label="Determines whether the CVV field can be empty. By default it is false."
+      v-model="wpwlOptions.allowEmptyCvv"
+    />
+
+    <FormSwitch
+      id="showCVVHint"
+      function-name="Show CVV Hint"
+      label="If set to true then the credit card form will display a hint on where the CVV is located when the mouse is hovering over the CVV field."
+      v-model="wpwlOptions.showCVVHint"
+    />
+
+    <FormSwitch
+      id="validation"
+      function-name="Validation"
+      label="If false, it disables validation and the functions 'validate' and 'on Submit' will not be called."
+      v-model="wpwlOptions.validation"
+    />
+
+    <FormSwitch
+      id="showLabels"
+      function-name="Show Labels"
+      label="Shows or hides input labels. Default is true."
+      v-model="wpwlOptions.showLabels"
+    />
+
+    <FormSwitch
+      id="showPlaceholders"
+      function-name="Show Placeholders"
+      label="Shows or hides input placeholders. Default is true."
+      v-model="wpwlOptions.showPlaceholders"
+    />
+
+    <br />
+    <!-- auto-launch the widget if checkout id is good -->
+    <label class="label">Internal Testing Behavior (more coming soon...)</label>
+    <FormSwitch
+      id="autoSwitch"
+      function-name="Auto-launch Widget"
+      label="Launches the widget if a checkout ID is generated successfully."
+      v-model="autoLaunchWidget"
+    />
+
+    <TextNotif color-type="is-warning">
+      This app does <strong>not</strong> have JQuery installed. Please manually
+      reload the page if your desired customization isn't loading properly.
+    </TextNotif>
+  </Modal>
+
+  <!-- modal that displays the widget -->
   <Modal
     :is-active="showModal"
     title="CopyandPay Widget"
     @close-action="closeWidget"
+    footer="Closing this window will automatically reset the page to properly reload the widget because JQuery is not installed."
   >
     <!-- widget here -->
     <div id="form-goes-here"></div>

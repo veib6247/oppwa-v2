@@ -9,6 +9,12 @@ export default {
       type: Boolean,
       default: true,
     },
+
+    footer: {
+      type: String,
+      required: false,
+      default: "",
+    },
   },
 };
 </script>
@@ -30,8 +36,7 @@ export default {
       </section>
       <footer class="modal-card-foot">
         <p>
-          Closing this window will automatically reset the page to properly
-          reload the widget because JQuery is not installed.
+          {{ footer }}
         </p>
       </footer>
     </div>
