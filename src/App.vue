@@ -133,11 +133,11 @@ export default {
   </div>
 
   <!-- swapping component views -->
-  <KeepAlive>
-    <Transition>
+  <Transition>
+    <KeepAlive>
       <component :is="currentView" />
-    </Transition>
-  </KeepAlive>
+    </KeepAlive>
+  </Transition>
 </template>
 
 <style>

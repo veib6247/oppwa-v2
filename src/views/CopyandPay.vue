@@ -283,7 +283,7 @@ export default {
           <!-- add extra params -->
           <div class="buttons has-addons">
             <button
-              class="button is-small is-rounded is-dark raleway"
+              class="button is-small is-dark raleway"
               @click="addRGParam"
               :disabled="disableButtons.btnRG"
             >
@@ -293,7 +293,7 @@ export default {
               <span>Create Registration</span>
             </button>
             <button
-              class="button is-small is-rounded is-dark raleway"
+              class="button is-small is-dark raleway"
               @click="addCOFParams"
               :disabled="disableButtons.btnCOF"
             >
