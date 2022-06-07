@@ -355,14 +355,8 @@ export default {
         :is-active="showCustomizationModal"
         title="Widget Customization"
         @close-action="showCustomizationModal = !showCustomizationModal"
+        @keyup.esc="showCustomizationModal = !showCustomizationModal"
       >
-        <!-- shopperResultURL -->
-        <FormInput
-          label="Shopper Result URL"
-          helper="The user is redirected to this page after clicking the Pay Now button on the widget."
-          v-model="shopperResultURL"
-        />
-
         <!-- widget style -->
         <div class="field">
           <label class="label">Style</label>
@@ -390,8 +384,8 @@ export default {
             </div>
           </div>
         </div>
-        <text-notif color-type="is-info"
-          >Selected Brands:
+        <text-notif color-type="is-info">
+          Selected Brands:
           <span v-for="brand in selectedBrands" :key="brand"
             >"{{ brand }}",
           </span>
@@ -450,6 +444,14 @@ export default {
           function-name="Auto-launch Widget"
           label="Launches the widget if a checkout ID is generated successfully."
           v-model="autoLaunchWidget"
+        />
+
+        <br />
+        <!-- shopperResultURL -->
+        <FormInput
+          label="Shopper Result URL"
+          helper="The user is redirected to this page after clicking the Pay Now button on the widget."
+          v-model="shopperResultURL"
         />
 
         <TextNotif color-type="is-warning">
