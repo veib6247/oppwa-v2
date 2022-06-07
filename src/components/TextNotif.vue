@@ -3,7 +3,6 @@ export default {
   props: {
     colorType: {
       type: String,
-      required: true,
     },
   },
 };

@@ -2,7 +2,6 @@
 // import utilities for string processing and etc.
 import { processParameters, parseBrands } from "../utils/stringProcessing";
 import { brandList } from "../utils/brandList";
-
 import { nanoid } from "nanoid";
 
 // import reusable components
@@ -12,7 +11,6 @@ import FormSwitch from "../components/FormSwitch.vue";
 import TextData from "../components/TextData.vue";
 import TextNotif from "../components/TextNotif.vue";
 import FormDisplayResponse from "../components/FormDisplayResponse.vue";
-import Notification from "../components/Notification.vue";
 import Modal from "../components/Modal.vue";
 
 // this will allow parcel to include the php file in the build process so that everything is in 1 directory
@@ -30,7 +28,6 @@ export default {
     TextData,
     TextNotif,
     FormDisplayResponse,
-    Notification,
     Modal,
   },
 
@@ -59,6 +56,7 @@ export default {
 
       shopperResultURL: "",
       response: "",
+      error: "",
       result: "",
 
       autoLaunchWidget: true,
@@ -115,9 +113,10 @@ export default {
      * hit API to get a checkout ID
      */
     async generateCheckoutId() {
-      // clear current response
+      // clear current response and errors
       this.response = "";
       this.result = "";
+      this.error = "";
 
       try {
         this.request.isOngoing = true; // start button loading animation
@@ -131,9 +130,24 @@ export default {
           }),
         });
 
-        // parse response to json
-        this.response = await rawResponse.json();
-        this.result = this.response.result;
+        // clone response in case parsing to JSON fails
+        const backupResponse = rawResponse.clone();
+
+        // parse response to json, else to text
+        try {
+          this.response = await rawResponse.json();
+          this.result = this.response.result;
+        } catch (error) {
+          console.error(
+            `Parsing to JSON failed! Parsing to text instead.`,
+            error
+          );
+          this.error = await backupResponse.text();
+          console.error(this.error);
+        } finally {
+          // turns button loading animation off
+          this.request.isOngoing = false;
+        }
 
         // if checkout id is generated successfully and
         // check with autolaunch is enabled
@@ -258,6 +272,7 @@ export default {
       label="API Endpoint"
       placeholder="https://eu-test.oppwa.com/v1/checkouts"
       helper="When sending requests to a live environment, change the subdomain to eu-prod"
+      @keyup.enter="generateCheckoutId"
       v-model="request.endPoint"
     />
 
@@ -267,6 +282,7 @@ export default {
       type="password"
       placeholder="OGE4Mjk0MTc0YjdlY2IyODAxNGI5Njk5MjIwMDE1Y2N8c3k2S0pzVDg="
       helper="The access token can be taken from the backend UI under Administration > Account data > Merchant / Channel Info only if you have specific administration rights."
+      @keyup.enter="generateCheckoutId"
       v-model="request.authToken"
     />
 
@@ -274,6 +290,7 @@ export default {
     <TextData
       label="Data Parameters"
       :placeholder="processParameters"
+      @keyup.ctrl.enter="generateCheckoutId"
       v-model="request.frontEndParameters"
     />
 
@@ -328,25 +345,30 @@ export default {
       </div>
     </nav>
 
+    <!-- display error notif if response is not the expected JSON from the server -->
+    <Transition>
+      <text-notif color-type="is-danger" v-if="error">
+        {{ error }}
+      </text-notif>
+    </Transition>
+
     <!-- display response for checkout ID generation -->
-    <Notification
-      :notif-description="result.description"
-      :result-code="result.code"
-      v-if="result.code"
-    >
-      <FormDisplayResponse
-        label="Complete JSON Response"
-        :data="response"
-        v-if="response"
-      />
-      <!-- generate checkout ID button -->
-      <FormButton
-        button-label="Launch CopyandPay Widget"
-        button-icon="fas fa-rocket"
-        v-if="response.id && !autoLaunchWidget"
-        @submit-data="launchWidget"
-      />
-    </Notification>
+    <Transition>
+      <text-notif v-if="result.code">
+        <FormDisplayResponse
+          label="Response"
+          :data="response"
+          v-if="response"
+        />
+        <!-- generate checkout ID button -->
+        <FormButton
+          button-label="Launch Widget"
+          button-icon="fas fa-rocket"
+          v-if="response.id && !autoLaunchWidget"
+          @submit-data="launchWidget"
+        />
+      </text-notif>
+    </Transition>
 
     <!-- modal that displays the available widget customizations -->
     <Transition>
@@ -384,7 +406,7 @@ export default {
             </div>
           </div>
         </div>
-        <text-notif color-type="is-info">
+        <text-notif>
           Selected Brands:
           <span v-for="brand in selectedBrands" :key="brand"
             >"{{ brand }}",
