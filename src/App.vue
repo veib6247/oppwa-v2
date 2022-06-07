@@ -3,6 +3,7 @@
 import CopyandPay from "./views/CopyandPay.vue";
 import ServertoServer from "./views/ServertoServer.vue";
 import Reporting from "./views/Reporting.vue";
+import NotFound from "./views/NotFound.vue";
 
 // basic routes
 const routes = {
@@ -27,7 +28,6 @@ export default {
         copyandpay: false,
         servertoserver: false,
         reporting: false,
-        resultpage: false,
       },
     };
   },
@@ -71,7 +71,7 @@ export default {
           break;
 
         default:
-          this.updateSelectedTab(true, false, false); // select cnp tab on default
+          this.updateSelectedTab(false, false, false); // select cnp tab on default
           break;
       }
     },
@@ -81,7 +81,7 @@ export default {
     // returns the name of the component depending on the URL route
     // return the ResultPage as redirect
     currentView() {
-      return routes[this.currentPath.slice(1) || "/"] || CopyandPay;
+      return routes[this.currentPath.slice(1) || "/"] || NotFound;
     },
   },
 
@@ -103,23 +103,19 @@ export default {
   <div class="tabs">
     <ul>
       <li :class="{ 'is-active': tabs.copyandpay }">
-        <a
-          href="#/copyandpay"
-          @click="updateSelectedTab(true, false, false, false)"
+        <a href="#/copyandpay" @click="updateSelectedTab(true, false, false)"
           >CopyandPay</a
         >
       </li>
       <li :class="{ 'is-active': tabs.servertoserver }">
         <a
           href="#/servertoserver"
-          @click="updateSelectedTab(false, true, false, false)"
+          @click="updateSelectedTab(false, true, false)"
           >Server-to-Server</a
         >
       </li>
       <li :class="{ 'is-active': tabs.reporting }">
-        <a
-          href="#/reporting"
-          @click="updateSelectedTab(false, false, true, false)"
+        <a href="#/reporting" @click="updateSelectedTab(false, false, true)"
           >Reporting API</a
         >
       </li>

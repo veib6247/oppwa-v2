@@ -270,13 +270,6 @@ export default {
       v-model="request.authToken"
     />
 
-    <!-- shopperResultURL -->
-    <FormInput
-      label="Shopper Result URL"
-      helper="The user is redirected to this page after clicking the Pay Now button on the widget."
-      v-model="shopperResultURL"
-    />
-
     <!-- PARAMS -->
     <TextData
       label="Data Parameters"
@@ -355,6 +348,27 @@ export default {
         title="Widget Customization"
         @close-action="showCustomizationModal = !showCustomizationModal"
       >
+        <!-- shopperResultURL -->
+        <FormInput
+          label="Shopper Result URL"
+          helper="The user is redirected to this page after clicking the Pay Now button on the widget."
+          v-model="shopperResultURL"
+        />
+
+        <!-- widget style -->
+        <div class="field">
+          <label class="label">Style</label>
+          <div class="control">
+            <div class="select is-small is-dark is-fullwidth">
+              <select class="raleway" v-model="wpwlOptions.style">
+                <option>card</option>
+                <option>logos</option>
+                <option>plain</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
         <!-- Brand lists -->
         <div class="field">
           <label class="label">Brands</label>
@@ -375,21 +389,6 @@ export default {
           </span>
         </text-notif>
 
-        <!-- widget style -->
-        <div class="field">
-          <label class="label">Style</label>
-          <div class="control">
-            <div class="select is-small is-dark is-fullwidth">
-              <select class="raleway" v-model="wpwlOptions.style">
-                <option>card</option>
-                <option>logos</option>
-                <option>plain</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <br />
         <label class="label">Widget Behavior (more coming soon...)</label>
         <FormSwitch
           id="requireCvv"
