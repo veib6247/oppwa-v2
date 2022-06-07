@@ -287,21 +287,28 @@ export default {
               @click="addRGParam"
               :disabled="disableButtons.btnRG"
             >
-              ADD - Create Registration
+              <span class="icon">
+                <i class="fas fa-plus"></i>
+              </span>
+              <span>Create Registration</span>
             </button>
             <button
               class="button is-small is-rounded is-dark raleway"
               @click="addCOFParams"
               :disabled="disableButtons.btnCOF"
             >
-              ADD - COF
+              <span class="icon">
+                <i class="fas fa-plus"></i>
+              </span>
+              <span> COF </span>
             </button>
           </div>
         </div>
       </div>
       <div class="level-right">
         <FormButton
-          button-label="Show Widget Customization Window"
+          button-label="Custom"
+          button-icon="fas fa-cog"
           button-size="is-small"
           @submit-data="showCustomizationModal = !showCustomizationModal"
         />
@@ -335,6 +342,7 @@ export default {
       <!-- generate checkout ID button -->
       <FormButton
         button-label="Launch CopyandPay Widget"
+        button-icon="fas fa-rocket"
         v-if="response.id && !autoLaunchWidget"
         @submit-data="launchWidget"
       />

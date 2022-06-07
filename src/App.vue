@@ -103,21 +103,31 @@ export default {
   <div class="tabs">
     <ul>
       <li :class="{ 'is-active': tabs.copyandpay }">
-        <a href="#/copyandpay" @click="updateSelectedTab(true, false, false)"
-          >CopyandPay</a
-        >
+        <a href="#/copyandpay" @click="updateSelectedTab(true, false, false)">
+          <span class="icon">
+            <i class="fas fa-credit-card"></i>
+          </span>
+          <span>CopyandPay</span>
+        </a>
       </li>
       <li :class="{ 'is-active': tabs.servertoserver }">
         <a
           href="#/servertoserver"
           @click="updateSelectedTab(false, true, false)"
-          >Server-to-Server</a
         >
+          <span class="icon">
+            <i class="fas fa-server"></i>
+          </span>
+          <span>Server-to-Server</span>
+        </a>
       </li>
       <li :class="{ 'is-active': tabs.reporting }">
-        <a href="#/reporting" @click="updateSelectedTab(false, false, true)"
-          >Reporting API</a
-        >
+        <a href="#/reporting" @click="updateSelectedTab(false, false, true)">
+          <span class="icon">
+            <i class="far fa-file-alt"></i>
+          </span>
+          <span>Reporting API</span>
+        </a>
       </li>
     </ul>
   </div>

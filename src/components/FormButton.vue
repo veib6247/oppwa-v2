@@ -11,6 +11,11 @@ export default {
       default: "is-small",
     },
 
+    buttonIcon: {
+      type: String,
+      default: "fas fa-paper-plane",
+    },
+
     isLoading: {
       type: Boolean,
       default: false,
@@ -26,7 +31,12 @@ export default {
         :class="[{ 'is-loading': isLoading }, buttonSize]"
         @click="$emit('submitData')"
       >
-        {{ buttonLabel }}
+        <span class="icon" :class="[buttonSize]">
+          <i :class="[buttonIcon]"></i>
+        </span>
+        <span>
+          {{ buttonLabel }}
+        </span>
       </button>
     </div>
   </div>
