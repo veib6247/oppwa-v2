@@ -11,6 +11,11 @@ export default {
       default: "",
     },
 
+    rowCount: {
+      type: Number,
+      default: 17,
+    },
+
     modelValue: {
       type: String,
       default: "",
@@ -25,7 +30,7 @@ export default {
     <div class="control">
       <textarea
         class="textarea is-small mono"
-        rows="17"
+        :rows="rowCount"
         spellcheck="false"
         :placeholder="placeholder"
         :value="modelValue"
