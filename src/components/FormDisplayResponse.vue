@@ -6,6 +6,11 @@ export default {
       default: "Response Data",
     },
 
+    rowCount: {
+      type: Number,
+      default: 13,
+    },
+
     data: {
       type: Object,
     },
@@ -15,9 +20,9 @@ export default {
 <template>
   <div class="field">
     <div class="control">
-      <label class="label is-size-7">{{ label }}</label>
+      <label class="label">{{ label }}</label>
       <textarea
-        rows="13"
+        :rows="rowCount"
         class="textarea is-small mono"
         :value="JSON.stringify(data, null, 2)"
         readonly
