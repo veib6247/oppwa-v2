@@ -9,8 +9,9 @@ $post = file_get_contents('php://input');
 $data_object = json_decode($post);
 
 // Set session variables
-$_SESSION["accessToken"] = $data_object->authToken;
+$_SESSION["endPoint"] = $data_object->endPoint;
 $_SESSION["parameters"] = $data_object->parameters;
+$_SESSION["authToken"] = $data_object->authToken;
 
 $responseData = request($data_object->endPoint, $data_object->parameters, $data_object->authToken);
 

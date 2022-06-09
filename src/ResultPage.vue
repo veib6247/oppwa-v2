@@ -3,13 +3,17 @@
 import FormButton from "./components/FormButton.vue";
 import TextNotif from "./components/TextNotif.vue";
 
+// import the result script
+const copyAndPayScriptPath = require("url:./../php/GetSessionData.php");
+
 export default {
   components: { FormButton, TextNotif },
   data() {
     return {
-      msg: "hola!",
+      msg: "Data Received",
       checkoutID: "",
       resourcePath: "",
+      sessionData: "",
     };
   },
 
@@ -38,15 +42,31 @@ export default {
         this.resourcePath = urlParams.get("resourcePath");
       }
     },
+
+    /**
+     * call server back to get transaction results
+     */
+    async fetchTransactionResults() {
+      try {
+        const rawReponse = await fetch(copyAndPayScriptPath, {
+          method: "POST",
+        });
+
+        this.sessionData = await rawReponse.json();
+      } catch (error) {
+        console.error(error);
+      }
+    },
   },
   mounted() {
     this.getURLParameters();
+    this.fetchTransactionResults();
   },
 };
 </script>
 
 <template>
-  <h1 class="title">{{ msg }}</h1>
+  <label for="" class="label">{{ msg }}</label>
 
   <TextNotif color-type="is-danger" v-if="!checkoutID">
     <code>checkoutID</code> was not detected! Please try the Reporting API
