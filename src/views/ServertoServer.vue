@@ -33,7 +33,7 @@ export default {
           "currency=EUR",
           "paymentType=DB",
           "paymentBrand=VISA",
-          "card.number=4000000000000044",
+          "card.number=4200000000000000",
           "card.holder=Bruce Wayne",
           "card.expiryMonth=02",
           "card.expiryYear=2034",
