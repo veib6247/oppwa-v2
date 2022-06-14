@@ -286,6 +286,8 @@ export default {
       v-model="request.authToken"
     />
 
+    <br />
+
     <!-- PARAMS -->
     <TextData
       label="Data Parameters"
