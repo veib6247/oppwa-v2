@@ -6,6 +6,7 @@ import { nanoid } from "nanoid";
 
 // import reusable components
 import FormInput from "../components/FormInput.vue";
+import FormPassword from "../components/FormPassword.vue";
 import FormButton from "../components/FormButton.vue";
 import FormSwitch from "../components/FormSwitch.vue";
 import TextData from "../components/TextData.vue";
@@ -23,6 +24,7 @@ export default {
   // component registration
   components: {
     FormInput,
+    FormPassword,
     FormButton,
     FormSwitch,
     TextData,
@@ -277,12 +279,10 @@ export default {
     />
 
     <!-- TOKEN -->
-    <FormInput
+    <FormPassword
       label="Access Token"
-      type="password"
       placeholder="OGE4Mjk0MTc0YjdlY2IyODAxNGI5Njk5MjIwMDE1Y2N8c3k2S0pzVDg="
       helper="The access token can be taken from the backend UI under Administration > Account data > Merchant / Channel Info only if you have specific administration rights."
-      @keyup.enter="generateCheckoutId"
       v-model="request.authToken"
     />
 
