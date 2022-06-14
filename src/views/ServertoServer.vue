@@ -1,20 +1,44 @@
 <script>
 import TextNotif from "../components/TextNotif.vue";
+import FormInput from "../components/FormInput.vue";
+import FormPassword from "../components/FormPassword.vue";
 
 export default {
   components: {
     TextNotif,
+    FormInput,
+    FormPassword,
   },
+
+  data() {
+    return {
+      request: {
+        endPoint: "https://eu-test.oppwa.com/v1/payments",
+        authToken: "OGE4Mjk0MTc0YjdlY2IyODAxNGI5Njk5MjIwMDE1Y2N8c3k2S0pzVDg=",
+      },
+    };
+  },
+
+  methods: {},
 };
 </script>
 
 <template>
   <div class="box">
-    <text-notif class="is-warning">
-      <h1 class="title is-size-6">
-        Server-to-server page is currently under construction.
-      </h1>
-      <p class="subtitle is-size-7">Coming soon.</p>
-    </text-notif>
+    <!-- ENDPOINT -->
+    <FormInput
+      label="API Endpoint"
+      placeholder="https://eu-test.oppwa.com/v1/checkouts"
+      helper="When sending requests to a live environment, change the subdomain to eu-prod"
+      v-model="request.endPoint"
+    />
+
+    <!-- TOKEN -->
+    <FormPassword
+      label="Access Token"
+      placeholder="OGE4Mjk0MTc0YjdlY2IyODAxNGI5Njk5MjIwMDE1Y2N8c3k2S0pzVDg="
+      helper="The access token can be taken from the backend UI under Administration > Account data > Merchant / Channel Info only if you have specific administration rights."
+      v-model="request.authToken"
+    />
   </div>
 </template>
