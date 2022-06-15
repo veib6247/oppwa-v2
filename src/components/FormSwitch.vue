@@ -37,7 +37,7 @@ export default {
       />
       <label :for="id"
         ><strong>{{ functionName }}</strong
-        >: {{ label }}</label
+        >&nbsp;{{ label }}</label
       >
     </div>
   </div>

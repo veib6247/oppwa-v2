@@ -82,6 +82,8 @@ export default {
         disableSubmitOnEnter: false,
         showTaxNumberField: false,
         displayBic: false,
+        enableSAQACompliance: false,
+        forceCardHolderEqualsBillingName: false,
       },
 
       disableButtons: {
@@ -448,7 +450,7 @@ export default {
           v-model="wpwlOptions.autofocus"
         />
 
-        <label class="label">Widget Behavior</label>
+        <label class="label">Widget Customizations</label>
         <p class="is-size-7">
           The following are shown with their default values in the
           <a
@@ -487,6 +489,13 @@ export default {
         />
 
         <FormSwitch
+          id="enableSAQACompliance"
+          function-name="Enable SAQA Compliance"
+          label="Use to make the credit card form SAQA compliant. Enabling this will render the card holder and expiry date fields in separate iFrames."
+          v-model="wpwlOptions.enableSAQACompliance"
+        />
+
+        <FormSwitch
           id="disableCardExpiryDateValidation"
           function-name="Disable Expiry Validation"
           label="If enabled, the form will not check for valid expiry date."
@@ -510,8 +519,15 @@ export default {
         <FormSwitch
           id="displayBic"
           function-name="Display BIC"
-          label="When enabled and DIRECTDEBIT_SEPA is selected, then this will display the BIC field."
+          label="When enabled with DIRECTDEBIT_SEPA brand, this will display the BIC field."
           v-model="wpwlOptions.displayBic"
+        />
+
+        <FormSwitch
+          id="forceCardHolderEqualsBillingName"
+          function-name="Holder = Billing"
+          label="Displays a field for the given name and a separate field for the surname."
+          v-model="wpwlOptions.forceCardHolderEqualsBillingName"
         />
 
         <FormSwitch
