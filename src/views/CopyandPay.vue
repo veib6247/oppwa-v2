@@ -66,13 +66,22 @@ export default {
       showCustomizationModal: false,
 
       wpwlOptions: {
+        locale: "en",
         style: "card",
         requireCvv: true,
         allowEmptyCvv: false,
         showCVVHint: false,
+        maskCvv: false,
         validation: true,
         showLabels: true,
         showPlaceholders: true,
+        brandDetection: true,
+        brandDetectionType: "binlist",
+        autofocus: "card.number",
+        disableCardExpiryDateValidation: false,
+        disableSubmitOnEnter: false,
+        showTaxNumberField: false,
+        displayBic: false,
       },
 
       disableButtons: {
@@ -380,6 +389,7 @@ export default {
         v-show="showCustomizationModal"
         :is-active="showCustomizationModal"
         title="Widget Customization"
+        footer="Dev note: If your screen gets stuck and can't scroll up, press shift + tab multiple times to manually go up. You can also click on a field and press esc to close. Fix coming soon."
         @close-action="showCustomizationModal = !showCustomizationModal"
         @keyup.esc="showCustomizationModal = !showCustomizationModal"
       >
@@ -424,7 +434,30 @@ export default {
           </span>
         </text-notif>
 
-        <label class="label">Widget Behavior (more coming soon...)</label>
+        <!-- locale -->
+        <FormInput
+          label="Locale"
+          helper="Display language of the widget."
+          v-model="wpwlOptions.locale"
+        />
+
+        <!-- autofocus -->
+        <FormInput
+          label="Autofocus"
+          helper="Lands the cursor on the indicated field once the widget loads."
+          v-model="wpwlOptions.autofocus"
+        />
+
+        <label class="label">Widget Behavior</label>
+        <p class="is-size-7">
+          The following are shown with their default values in the
+          <a
+            href="https://docs.oppwa.com/tutorials/integration-guide/widget-api"
+            target="_blank"
+            rel="noopener noreferrer"
+            >documentation</a
+          >.
+        </p>
         <FormSwitch
           id="requireCvv"
           function-name="Require CVV"
@@ -441,15 +474,57 @@ export default {
 
         <FormSwitch
           id="showCVVHint"
-          function-name="Show CVV Hint"
-          label="If set to true then the credit card form will display a hint on where the CVV is located when the mouse is hovering over the CVV field."
+          function-name="CVV Hint"
+          label="Displays a hint on where the CVV is located on hover."
           v-model="wpwlOptions.showCVVHint"
+        />
+
+        <FormSwitch
+          id="maskCvv"
+          function-name="Mask CVV"
+          label="This will hide the values inputted in the CVV field."
+          v-model="wpwlOptions.maskCvv"
+        />
+
+        <FormSwitch
+          id="disableCardExpiryDateValidation"
+          function-name="Disable Expiry Validation"
+          label="If enabled, the form will not check for valid expiry date."
+          v-model="wpwlOptions.disableCardExpiryDateValidation"
+        />
+
+        <FormSwitch
+          id="disableSubmitOnEnter"
+          function-name="Disable Submit On Enter"
+          label="Disables the submit of payment form when Enter key is pressed."
+          v-model="wpwlOptions.disableSubmitOnEnter"
+        />
+
+        <FormSwitch
+          id="showTaxNumberField"
+          function-name="Show TaxNumber Field"
+          label="The CPF field is needed for payments processed in Brazil."
+          v-model="wpwlOptions.showTaxNumberField"
+        />
+
+        <FormSwitch
+          id="displayBic"
+          function-name="Display BIC"
+          label="When enabled and DIRECTDEBIT_SEPA is selected, then this will display the BIC field."
+          v-model="wpwlOptions.displayBic"
+        />
+
+        <FormSwitch
+          id="brandDetection"
+          function-name="Brand Detection"
+          label="Automatic detection during typing."
+          v-model="wpwlOptions.brandDetection"
         />
 
         <FormSwitch
           id="validation"
           function-name="Validation"
-          label="If false, it disables validation and the functions 'validate' and 'on Submit' will not be called."
+          label="Disables validation and the functions 'validate' and 'on Submit' will not be called."
           v-model="wpwlOptions.validation"
         />
 
@@ -469,7 +544,7 @@ export default {
 
         <FormSwitch
           id="autoSwitch"
-          function-name="Auto-launch Widget"
+          function-name="Autolaunch (internal only)"
           label="Launches the widget if a checkout ID is generated successfully."
           v-model="autoLaunchWidget"
         />

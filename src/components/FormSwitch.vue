@@ -36,7 +36,8 @@ export default {
         @input="$emit('update:modelValue', $event.target.checked)"
       />
       <label :for="id"
-        ><strong>{{ functionName }}</strong> - {{ label }}</label
+        ><strong>{{ functionName }}</strong
+        >: {{ label }}</label
       >
     </div>
   </div>
