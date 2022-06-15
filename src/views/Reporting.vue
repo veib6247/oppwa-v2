@@ -52,15 +52,17 @@ export default {
         this.request.endpoint = `https://${subDomain}.oppwa.com/v1/query?entityId=${this.request.entityId}&merchantTransactionId=${this.query}`;
       }
 
-      // console.info(`Generated URL: ${this.request.endpoint}`);
+      console.info(`Generated URL: ${this.request.endpoint}`);
     },
 
     async processQuery() {
+      // clear current response if any
       this.response = "";
 
       // build url as per selected type
       this.buildURL();
 
+      // hit endpoint
       try {
         this.request.isOngoing = true; // start button loading animation
 
@@ -79,12 +81,8 @@ export default {
         try {
           this.response = await rawResponse.json();
         } catch (error) {
-          console.error(
-            `Parsing to JSON failed! Parsing to text instead.`,
-            error
-          );
           this.error = await backupResponse.text();
-          console.error(this.error);
+          console.error(error, this.error);
         } finally {
           // turns button loading animation off
           this.request.isOngoing = false;
@@ -134,10 +132,9 @@ export default {
       </p>
       <p class="control is-expanded">
         <input
-          class="input is-small mono"
           type="text"
+          class="input is-small mono"
           v-model="query"
-          placeholder="e.g. 8a82944a4cc25ebf014cc2c782423202 or TRANSACTION_001"
           @keyup.enter="processQuery"
         />
       </p>
