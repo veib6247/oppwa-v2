@@ -26,9 +26,9 @@ export default {
         authToken: "OGE4Mjk0MTc0YjdlY2IyODAxNGI5Njk5MjIwMDE1Y2N8c3k2S0pzVDg=",
         entityId: "8a8294174b7ecb28014b9699220015ca",
         isOngoing: false,
+        querySlug: "",
       },
       isLiveMode: false,
-      query: "",
       selectedQueryType: "paymentId",
       response: "",
       error: "",
@@ -47,9 +47,9 @@ export default {
       }
 
       if (this.selectedQueryType === "paymentId") {
-        this.request.endpoint = `https://${subDomain}.oppwa.com/v1/query/${this.query}?entityId=${this.request.entityId}`;
+        this.request.endpoint = `https://${subDomain}.oppwa.com/v1/query/${this.request.querySlug}?entityId=${this.request.entityId}`;
       } else {
-        this.request.endpoint = `https://${subDomain}.oppwa.com/v1/query?entityId=${this.request.entityId}&merchantTransactionId=${this.query}`;
+        this.request.endpoint = `https://${subDomain}.oppwa.com/v1/query?entityId=${this.request.entityId}&merchantTransactionId=${this.request.querySlug}`;
       }
 
       console.info(`Generated URL: ${this.request.endpoint}`);
@@ -114,32 +114,34 @@ export default {
     <FormInput
       label="Entity ID"
       placeholder="8a8294174b7ecb28014b9699220015ca"
-      helper="Processing ID where the transaction transpired."
+      helper="Processing ID where the transaction occured."
       v-model="request.entityId"
       @keyup.enter="processQuery"
     />
 
-    <!-- query type and query -->
-    <label class="label">Query</label>
-    <div class="field has-addons">
-      <p class="control">
-        <span class="select is-small">
+    <!-- query type -->
+    <div class="field">
+      <label class="label">Search Type</label>
+      <div class="control">
+        <div class="select is-small">
           <select class="mono" v-model="selectedQueryType">
             <option>paymentId</option>
             <option>merchantTransactionId</option>
           </select>
-        </span>
-      </p>
-      <p class="control is-expanded">
-        <input
-          type="text"
-          class="input is-small mono"
-          v-model="query"
-          @keyup.enter="processQuery"
-        />
-      </p>
+        </div>
+      </div>
+
+      <p class="help">Select the type and input your query.</p>
     </div>
-    <p class="help">Select the type and input your query.</p>
+
+    <!-- Query Value -->
+    <FormInput
+      label="Query Value"
+      placeholder="8a82944a4cc25ebf014cc2c782423202 or test123"
+      helper="The ID of the transaction you are looking for."
+      v-model="request.querySlug"
+      @keyup.enter="processQuery"
+    />
 
     <!-- <br /> -->
 
