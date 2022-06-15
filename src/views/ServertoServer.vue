@@ -108,7 +108,6 @@ export default {
             defaultParams.capture
           );
           this.textRowcount = 5;
-
           break;
 
         case "Refund":
@@ -117,7 +116,6 @@ export default {
             defaultParams.refund
           );
           this.textRowcount = 5;
-
           break;
 
         case "Reversal":
@@ -134,7 +132,23 @@ export default {
             defaultParams.receipt
           );
           this.textRowcount = 5;
+          break;
 
+        case "Repeated":
+          this.request.endPoint =
+            "https://eu-test.oppwa.com/v1/registrations/{id}/payments";
+          this.request.frontEndParameters = processParameters(
+            defaultParams.repeated
+          );
+          this.textRowcount = 10;
+          break;
+
+        case "Registration - Standalone":
+          this.request.endPoint = "https://eu-test.oppwa.com/v1/registrations";
+          this.request.frontEndParameters = processParameters(
+            defaultParams.registration
+          );
+          this.textRowcount = 10;
           break;
 
         default:
@@ -259,6 +273,8 @@ export default {
             <option>Refund</option>
             <option>Reversal</option>
             <option>Receipt</option>
+            <option>Repeated</option>
+            <option>Registration - Standalone</option>
           </select>
         </div>
       </div>

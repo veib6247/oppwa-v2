@@ -99,4 +99,25 @@ export const defaultParams = {
     'currency=EUR',
     'paymentType=RC',
   ],
+
+  repeated: [
+    'entityId=8a8294174b7ecb28014b9699220015ca',
+    'amount=1.00',
+    'currency=EUR',
+    'paymentType=DB',
+    'standingInstruction.mode=REPEATED',
+    'standingInstruction.type=RECURRING',
+    'standingInstruction.initialTransactionId=1234567890',
+    'standingInstruction.source=MIT',
+  ],
+
+  registration: [
+    'entityId=8a8294174b7ecb28014b9699220015ca',
+    'paymentBrand=VISA',
+    'card.number=4200000000000000',
+    'card.holder=Bruce Wayne',
+    'card.expiryMonth=05',
+    'card.expiryYear=2034',
+    'card.cvv=123',
+  ],
 }
