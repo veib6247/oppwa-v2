@@ -33,7 +33,7 @@ export default {
           "currency=EUR",
           "paymentType=DB",
           "paymentBrand=VISA",
-          "card.number=4200000000000000",
+          "card.number=4711100000000000", // 4711100000000000 for 3DS, 4200000000000000 for sync
           "card.holder=Bruce Wayne",
           "card.expiryMonth=02",
           "card.expiryYear=2034",
@@ -135,6 +135,36 @@ export default {
         this.request.isOngoing = false;
       }
     },
+
+    redirectToACS() {
+      const form = document.createElement("form");
+      form.setAttribute("id", "3ds-redirect-form");
+      form.setAttribute("action", this.response.redirect.url);
+      form.setAttribute("method", "post");
+
+      // todo: add inputs
+      const arrParameters = this.response.redirect.parameters;
+
+      arrParameters.forEach((parameter, index) => {
+        const parameterInput = document.createElement("input");
+        parameterInput.setAttribute("type", "hidden");
+        parameterInput.setAttribute("name", parameter.name);
+        parameterInput.setAttribute("value", parameter.value);
+
+        // append the newly created input to the form
+        form.appendChild(parameterInput);
+
+        // console.info(
+        //   `${index} = Parameter Name: ${parameter.name}, Value: ${parameter.value}`
+        // );
+      });
+
+      // append form to the page
+      document.body.appendChild(form);
+
+      // submit the form
+      form.submit();
+    },
   },
 
   mounted() {
@@ -190,14 +220,35 @@ export default {
       </div>
     </nav>
 
-    <!-- display response for checkout ID generation -->
+    <!-- display notif if redirect parameters are detected -->
     <Transition>
-      <FormDisplayResponse
-        label="Response"
-        :row-count="30"
-        :data="response"
-        v-if="response"
-      />
+      <text-notif color-type="is-warning" v-if="response.redirect">
+        <p class="title is-size-5">Redirect available</p>
+        <p>
+          3DS parameters have been detected in the response, click the button
+          below to redirect to the issuing bank's ACS page.
+        </p>
+
+        <br />
+        <FormButton
+          buttonLabel="Redirect to ACS page"
+          buttonSize="is-small"
+          buttonIcon="fas fa-link"
+          @click="redirectToACS"
+        />
+      </text-notif>
+    </Transition>
+
+    <!-- display response -->
+    <Transition>
+      <text-notif v-if="response">
+        <FormDisplayResponse
+          label="JSON Response"
+          :row-count="45"
+          :data="response"
+          v-if="response"
+        />
+      </text-notif>
     </Transition>
 
     <!-- display error notif if response is not the expected JSON from the server -->
