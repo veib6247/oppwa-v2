@@ -154,18 +154,18 @@ export default {
       v-model="isLiveMode"
     />
 
-    <br />
-
-    <FormButton
-      buttonIcon="fas fa-search"
-      buttonLabel="Search"
-      buttonSize="is-small"
-      :isLoading="request.isOngoing"
-      :isRounded="true"
-      @click="processQuery"
-    />
-
-    <br />
+    <nav class="level">
+      <div class="level-item">
+        <FormButton
+          buttonIcon="fas fa-search"
+          buttonLabel="Search"
+          buttonSize="is-small"
+          :isLoading="request.isOngoing"
+          :isRounded="true"
+          @click="processQuery"
+        />
+      </div>
+    </nav>
 
     <!-- display response -->
     <Transition>
