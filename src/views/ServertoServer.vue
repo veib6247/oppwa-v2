@@ -6,7 +6,7 @@ import TextData from "../components/TextData.vue";
 import FormButton from "../components/FormButton.vue";
 import FormDisplayResponse from "../components/FormDisplayResponse.vue";
 
-import { processParameters } from "../utils/stringProcessing";
+import { processParameters, defaultParams } from "../utils/stringProcessing";
 import { nanoid } from "nanoid";
 
 // this will allow parcel to include the php file in the build process so that everything is in 1 directory
@@ -24,6 +24,8 @@ export default {
 
   data() {
     return {
+      selectedType: "Payment",
+      textRowcount: 30,
       request: {
         endPoint: "https://eu-test.oppwa.com/v1/payments",
         authToken: "OGE4Mjk0MTc0YjdlY2IyODAxNGI5Njk5MjIwMDE1Y2N8c3k2S0pzVDg=",
@@ -65,6 +67,12 @@ export default {
     };
   },
 
+  watch: {
+    selectedType(newType) {
+      this.updateParameters(newType);
+    },
+  },
+
   computed: {
     // returns processed string to display to text area
     processParameters() {
@@ -78,6 +86,64 @@ export default {
   },
 
   methods: {
+    /**
+     * updates the endpoint and parameters depending on the chosen type
+     */
+    updateParameters(parameterType) {
+      switch (parameterType) {
+        case "Payment":
+          this.request.endPoint = "https://eu-test.oppwa.com/v1/payments";
+
+          // this.generateTransactionId();
+          // this.getResultURL();
+
+          // push to frontend
+          this.request.frontEndParameters = this.processParameters;
+          this.textRowcount = 30;
+          break;
+
+        case "Capture":
+          this.request.endPoint = "https://eu-test.oppwa.com/v1/payments/{id}";
+          this.request.frontEndParameters = processParameters(
+            defaultParams.capture
+          );
+          this.textRowcount = 5;
+
+          break;
+
+        case "Refund":
+          this.request.endPoint = "https://eu-test.oppwa.com/v1/payments/{id}";
+          this.request.frontEndParameters = processParameters(
+            defaultParams.refund
+          );
+          this.textRowcount = 5;
+
+          break;
+
+        case "Reversal":
+          this.request.endPoint = "https://eu-test.oppwa.com/v1/payments/{id}";
+          this.request.frontEndParameters = processParameters(
+            defaultParams.reversal
+          );
+          this.textRowcount = 5;
+          break;
+
+        case "Receipt":
+          this.request.endPoint = "https://eu-test.oppwa.com/v1/payments/{id}";
+          this.request.frontEndParameters = processParameters(
+            defaultParams.receipt
+          );
+          this.textRowcount = 5;
+
+          break;
+
+        default:
+          this.request.endPoint = "https://eu-test.oppwa.com/v1/payments";
+          this.request.frontEndParameters = "";
+          break;
+      }
+    },
+
     generateTransactionId() {
       this.request.defaultParameters.push(
         `merchantTransactionId=test_transaction_${nanoid()}`
@@ -165,20 +231,39 @@ export default {
       // submit the form
       form.submit();
     },
+
+    initParameters() {
+      this.generateTransactionId();
+      this.getResultURL();
+
+      // process the default params into the frontend using computed function
+      this.request.frontEndParameters = this.processParameters;
+    },
   },
 
   mounted() {
-    this.generateTransactionId();
-    this.getResultURL();
-
-    // process the default params into the frontend using computed function
-    this.request.frontEndParameters = this.processParameters;
+    this.initParameters();
   },
 };
 </script>
 
 <template>
   <div class="box">
+    <div class="field">
+      <div class="control">
+        <label for="" class="label">Type</label>
+        <div class="select is-small">
+          <select class="mono" v-model="selectedType">
+            <option>Payment</option>
+            <option>Capture</option>
+            <option>Refund</option>
+            <option>Reversal</option>
+            <option>Receipt</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
     <!-- ENDPOINT -->
     <FormInput
       label="API Endpoint"
@@ -201,7 +286,7 @@ export default {
     <!-- PARAMS -->
     <TextData
       label="Data Parameters"
-      :row-count="32"
+      :row-count="textRowcount"
       :placeholder="processParameters"
       @keyup.ctrl.enter="submitRequest"
       v-model="request.frontEndParameters"
