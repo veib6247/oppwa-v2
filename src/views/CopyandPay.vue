@@ -84,6 +84,9 @@ export default {
         displayBic: false,
         enableSAQACompliance: false,
         forceCardHolderEqualsBillingName: false,
+        spinner: {
+          color: "pink",
+        },
       },
 
       disableButtons: {
@@ -402,40 +405,6 @@ export default {
           v-model="shopperResultURL"
         />
 
-        <!-- widget style -->
-        <div class="field">
-          <label class="label">Style</label>
-          <div class="control">
-            <div class="select is-small is-dark is-fullwidth">
-              <select class="raleway" v-model="wpwlOptions.style">
-                <option>card</option>
-                <option>logos</option>
-                <option>plain</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <!-- Brand lists -->
-        <div class="field">
-          <label class="label">Brands</label>
-          <div class="control is-expanded">
-            <div class="select is-small is-fullwidth is-multiple">
-              <select class="mono" multiple size="8" v-model="selectedBrands">
-                <option v-for="brand in brandList" :key="brand">
-                  {{ brand }}
-                </option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <text-notif>
-          Selected Brands:
-          <span v-for="brand in selectedBrands" :key="brand"
-            >"{{ brand }}",
-          </span>
-        </text-notif>
-
         <!-- locale -->
         <FormInput
           label="Locale"
@@ -449,6 +418,20 @@ export default {
           helper="Lands the cursor on the indicated field once the widget loads."
           v-model="wpwlOptions.autofocus"
         />
+
+        <!-- widget style -->
+        <div class="field">
+          <label class="label">Style</label>
+          <div class="control">
+            <div class="select is-small is-dark is-fullwidth">
+              <select class="raleway" v-model="wpwlOptions.style">
+                <option>card</option>
+                <option>logos</option>
+                <option>plain</option>
+              </select>
+            </div>
+          </div>
+        </div>
 
         <label class="label">Widget Customizations</label>
         <p class="is-size-7">
@@ -570,6 +553,26 @@ export default {
           manually reload the page if your desired customization isn't loading
           properly.
         </TextNotif>
+
+        <!-- Brand lists -->
+        <div class="field">
+          <label class="label">Brands</label>
+          <div class="control is-expanded">
+            <div class="select is-small is-fullwidth is-multiple">
+              <select class="mono" multiple size="8" v-model="selectedBrands">
+                <option v-for="brand in brandList" :key="brand">
+                  {{ brand }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <text-notif>
+          Selected Brands:
+          <span v-for="brand in selectedBrands" :key="brand"
+            >"{{ brand }}",
+          </span>
+        </text-notif>
       </Modal>
     </Transition>
 
