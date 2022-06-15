@@ -548,12 +548,6 @@ export default {
           v-model="autoLaunchWidget"
         />
 
-        <TextNotif color-type="is-warning">
-          This app does <strong>not</strong> have JQuery installed. Please
-          manually reload the page if your desired customization isn't loading
-          properly.
-        </TextNotif>
-
         <!-- Brand lists -->
         <div class="field">
           <label class="label">Brands</label>
