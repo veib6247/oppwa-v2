@@ -61,8 +61,9 @@ export default {
           this.decryptedBody = await rawResponse.json();
         } catch (error) {
           // if decryption fails, notify user
-          this.error = await backupResponse.text();
-          console.error(error, this.error);
+          const consoleError = await backupResponse.text();
+          this.error = "Decryption failed, please check your inputs.";
+          console.error(error, consoleError);
         } finally {
           // turns button loading animation off
           this.request.isOngoing = false;
@@ -93,6 +94,7 @@ export default {
       placeholder="15D8456E2E49B8E1245C2AE7"
       helper="The notification's header contains the initialization vector."
       v-model="initializationVector"
+      @keyup.enter="decryptData"
     />
 
     <FormInput
@@ -100,6 +102,7 @@ export default {
       placeholder="235D79EA76D16C8761B4AD4A80198F6B"
       helper="The notification's header contains the authentication tag."
       v-model="authenticationTag"
+      @keyup.enter="decryptData"
     />
 
     <TextData
@@ -107,6 +110,7 @@ export default {
       :rowCount="9"
       v-model="encryptedBody"
       placeholder="0B25E1026B30376D8DEEEC8F87A649D80F8F79C48E12137FF02635C91BF3008A96374B718418B94B15CF439B80AE3D99C31A701EC2F65966A0E8DDE7248F9B87979B51342290AAF94594A6874ABE1EAAFE2C6E5DFBE54F996D2A4DD06386EEF000FD90A41153CB17CD3F48B82018D5E86811D13837C3CC1684C35CDEBBA46A5490B3381F178B24BBDA5FDCE5058643EBA3D964CF1A2CA64D0B1A7780E3CCFD4F057E0E164134BF005939C6629E826E2418"
+      @keyup.ctrl.enter="decryptData"
     />
 
     <FormButton
