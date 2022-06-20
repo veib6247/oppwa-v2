@@ -134,6 +134,14 @@ export default {
       <p class="help">Select the type and input your query.</p>
     </div>
 
+    <!-- toggle for environments -->
+    <FormSwitch
+      functionName="Enable LIVE mode"
+      id="liveModeToggle"
+      label="Toggles the query between test and live environments"
+      v-model="isLiveMode"
+    />
+
     <!-- Query Value -->
     <FormInput
       label="Query Value"
@@ -145,30 +153,24 @@ export default {
 
     <!-- <br /> -->
 
-    <!-- toggle for environments -->
-    <FormSwitch
-      functionName="Enable LIVE mode"
-      id="liveModeToggle"
-      label="Toggles the query between test and live environments"
-      v-model="isLiveMode"
-    />
-
     <nav class="level">
-      <div class="level-item">
-        <FormButton
-          buttonIcon="fas fa-search"
-          buttonLabel="Search"
-          buttonSize="is-small"
-          :isLoading="request.isOngoing"
-          :isRounded="true"
-          @click="processQuery"
-        />
+      <div class="level-left">
+        <div class="level-item">
+          <FormButton
+            buttonIcon="fas fa-search"
+            buttonLabel="Submit Query"
+            buttonSize="is-small"
+            :isLoading="request.isOngoing"
+            :isRounded="true"
+            @click="processQuery"
+          />
+        </div>
       </div>
     </nav>
 
     <!-- display response -->
     <Transition>
-      <text-notif v-if="response">
+      <text-notif color-type="is-gray" v-if="response">
         <FormDisplayResponse
           label="JSON Response"
           :row-count="30"

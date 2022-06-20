@@ -83,6 +83,7 @@ export default {
   <div class="box">
     <FormPassword
       label="BIP Secret"
+      placeholder="614B31C2057DB34DFC8049AF2355513E72936056DBAA3999F0257C5A90530838"
       helper="The secret is the key used for encrypting the message's content."
       v-model="bipSecret"
     />

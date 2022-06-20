@@ -310,14 +310,16 @@ export default {
 
     <!-- submit button -->
     <nav class="level">
-      <div class="level-item">
-        <FormButton
-          buttonLabel="Submit"
-          buttonSize="is-small"
-          :is-loading="request.isOngoing"
-          :isRounded="true"
-          @click="submitRequest"
-        />
+      <div class="level-left">
+        <div class="level-item">
+          <FormButton
+            buttonLabel="Submit Request"
+            buttonSize="is-small"
+            :is-loading="request.isOngoing"
+            :isRounded="true"
+            @click="submitRequest"
+          />
+        </div>
       </div>
     </nav>
 
@@ -342,7 +344,7 @@ export default {
 
     <!-- display response -->
     <Transition>
-      <text-notif v-if="response">
+      <text-notif color-type="is-gray" v-if="response">
         <FormDisplayResponse
           label="JSON Response"
           :row-count="45"

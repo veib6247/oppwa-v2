@@ -314,6 +314,16 @@ export default {
     <nav class="level">
       <div class="level-left">
         <div class="level-item">
+          <FormButton
+            button-label="Generate Checkout ID"
+            :is-rounded="true"
+            :is-loading="request.isOngoing"
+            @submit-data="generateCheckoutId"
+          />
+        </div>
+      </div>
+      <div class="level-right">
+        <div class="level-item">
           <!-- add extra params -->
           <div class="buttons has-addons">
             <button
@@ -338,28 +348,14 @@ export default {
             </button>
           </div>
         </div>
-      </div>
-      <div class="level-right">
-        <FormButton
-          button-label="Customize"
-          button-icon="fas fa-cog"
-          button-size="is-small"
-          @submit-data="showCustomizationModal = !showCustomizationModal"
-        />
-      </div>
-    </nav>
-
-    <br />
-    <!-- level to keep button centered -->
-    <nav class="level">
-      <div class="level-item">
-        <!-- generate checkout ID button -->
-        <FormButton
-          button-label="Generate Checkout ID"
-          :is-rounded="true"
-          :is-loading="request.isOngoing"
-          @submit-data="generateCheckoutId"
-        />
+        <div class="level-item">
+          <FormButton
+            button-label="Customize"
+            button-icon="fas fa-cog"
+            button-size="is-small"
+            @submit-data="showCustomizationModal = !showCustomizationModal"
+          />
+        </div>
       </div>
     </nav>
 
@@ -372,7 +368,7 @@ export default {
 
     <!-- display response for checkout ID generation -->
     <Transition>
-      <text-notif v-if="result.code">
+      <text-notif v-if="result.code" color-type="is-gray">
         <FormDisplayResponse
           label="Response"
           :data="response"
