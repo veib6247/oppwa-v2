@@ -236,7 +236,7 @@ export default {
       widgetForm.setAttribute("class", "paymentWidgets");
 
       // check which brand list of apply
-      if (overrideBrandlist) {
+      if (this.overrideBrandlist) {
         widgetForm.setAttribute("data-brands", this.manualBrandlist);
       } else {
         widgetForm.setAttribute(
