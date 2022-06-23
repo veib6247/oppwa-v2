@@ -96,6 +96,8 @@ export default {
 
       brandList: "",
       selectedBrands: ["VISA", "MASTER"],
+      overrideBrandlist: false,
+      manualBrandlist: "",
     };
   },
 
@@ -232,7 +234,16 @@ export default {
       widgetForm.setAttribute("action", this.shopperResultURL);
       widgetForm.setAttribute("id", "widget-form");
       widgetForm.setAttribute("class", "paymentWidgets");
-      widgetForm.setAttribute("data-brands", parseBrands(this.selectedBrands));
+
+      // check which brand list of apply
+      if (overrideBrandlist) {
+        widgetForm.setAttribute("data-brands", this.manualBrandlist);
+      } else {
+        widgetForm.setAttribute(
+          "data-brands",
+          parseBrands(this.selectedBrands)
+        );
+      }
 
       // append to container
       document.getElementById("widget-form-container").append(widgetForm);
@@ -541,30 +552,58 @@ export default {
 
         <FormSwitch
           id="autoSwitch"
-          function-name="Autolaunch (internal only)"
+          function-name="Autolaunch (Internal)"
           label="Launches the widget if a checkout ID is generated successfully."
           v-model="autoLaunchWidget"
         />
 
-        <!-- Brand lists -->
-        <div class="field">
-          <label class="label">Brands</label>
-          <div class="control is-expanded">
-            <div class="select is-small is-fullwidth is-multiple">
-              <select class="mono" multiple size="8" v-model="selectedBrands">
-                <option v-for="brand in brandList" :key="brand">
-                  {{ brand }}
-                </option>
-              </select>
+        <!-- override brand list -->
+        <FormSwitch
+          id="overrideBrandlist"
+          function-name="Override Brand List (Internal)"
+          label="Manually input your brand list."
+          v-model="overrideBrandlist"
+        />
+
+        <Transition>
+          <fieldset :disabled="overrideBrandlist" v-if="!overrideBrandlist">
+            <!-- Brand lists -->
+            <div class="field">
+              <label class="label">Brands</label>
+              <div class="control is-expanded">
+                <div class="select is-small is-fullwidth is-multiple">
+                  <select
+                    class="mono"
+                    multiple
+                    size="8"
+                    v-model="selectedBrands"
+                  >
+                    <option v-for="brand in brandList" :key="brand">
+                      {{ brand }}
+                    </option>
+                  </select>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-        <text-notif>
-          Selected Brands:
-          <span v-for="brand in selectedBrands" :key="brand"
-            >"{{ brand }}",
-          </span>
-        </text-notif>
+            <text-notif>
+              Selected Brands:
+              <span v-for="brand in selectedBrands" :key="brand"
+                >"{{ brand }}",
+              </span>
+            </text-notif>
+          </fieldset>
+        </Transition>
+
+        <!-- manual input of brand list -->
+        <Transition>
+          <FormInput
+            label="Brands"
+            placeholder="VISA MASTER AMEX JCB"
+            helper="Keep each brand in all-caps and separated by a space."
+            v-model="manualBrandlist"
+            v-if="overrideBrandlist"
+          />
+        </Transition>
       </Modal>
     </Transition>
 
