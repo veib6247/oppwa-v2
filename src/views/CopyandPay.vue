@@ -201,9 +201,11 @@ export default {
       let widgetScript = document.createElement("script");
       widgetScript.id = "widget-script-tag";
 
-      // get subdomain of endpoint and prefix to the src
-      const subDomain = this.request.endPoint.split(".")[0];
-      widgetScript.src = `${subDomain}.oppwa.com/v1/paymentWidgets.js?checkoutId=${this.response.id}`;
+      // get the host that was used for generating the checkout ID and use it as the script's src attribute
+      const dummy_anchor = document.createElement("a");
+      dummy_anchor.href = this.request.endPoint;
+
+      widgetScript.src = `https://${dummy_anchor.host}/v1/paymentWidgets.js?checkoutId=${this.response.id}`;
 
       // append to head
       document.querySelector("head").append(widgetScript);
