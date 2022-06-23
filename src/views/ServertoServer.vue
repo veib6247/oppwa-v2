@@ -61,6 +61,17 @@ export default {
         frontEndParameters: "",
         isOngoing: false,
       },
+      selectParameters: {
+        payment: "",
+        capture: "",
+        refund: "",
+        reversal: "",
+        receipt: "",
+        repeated: "",
+        registration: "",
+        standalone3dv1: "",
+        standalone3dv2: "",
+      },
       response: "",
       error: "",
       result: "",
@@ -94,61 +105,60 @@ export default {
         case "Payment":
           this.request.endPoint = "https://eu-test.oppwa.com/v1/payments";
 
-          // this.generateTransactionId();
-          // this.getResultURL();
-
-          // push to frontend
-          this.request.frontEndParameters = this.processParameters;
+          // this.request.frontEndParameters = this.processParameters;
+          this.request.frontEndParameters = this.selectParameters.payment;
           this.textRowcount = 30;
           break;
 
         case "Capture":
           this.request.endPoint = "https://eu-test.oppwa.com/v1/payments/{id}";
-          this.request.frontEndParameters = processParameters(
-            defaultParams.capture
-          );
+          this.request.frontEndParameters = this.selectParameters.capture;
           this.textRowcount = 5;
           break;
 
         case "Refund":
           this.request.endPoint = "https://eu-test.oppwa.com/v1/payments/{id}";
-          this.request.frontEndParameters = processParameters(
-            defaultParams.refund
-          );
+          this.request.frontEndParameters = this.selectParameters.refund;
           this.textRowcount = 5;
           break;
 
         case "Reversal":
           this.request.endPoint = "https://eu-test.oppwa.com/v1/payments/{id}";
-          this.request.frontEndParameters = processParameters(
-            defaultParams.reversal
-          );
-          this.textRowcount = 5;
+          this.request.frontEndParameters = this.selectParameters.reversal;
+          this.textRowcount = 3;
           break;
 
         case "Receipt":
           this.request.endPoint = "https://eu-test.oppwa.com/v1/payments/{id}";
-          this.request.frontEndParameters = processParameters(
-            defaultParams.receipt
-          );
+          this.request.frontEndParameters = this.selectParameters.receipt;
           this.textRowcount = 5;
           break;
 
         case "Repeated":
           this.request.endPoint =
             "https://eu-test.oppwa.com/v1/registrations/{id}/payments";
-          this.request.frontEndParameters = processParameters(
-            defaultParams.repeated
-          );
-          this.textRowcount = 10;
+          this.request.frontEndParameters = this.selectParameters.repeated;
+          this.textRowcount = 9;
           break;
 
         case "Registration - Standalone":
           this.request.endPoint = "https://eu-test.oppwa.com/v1/registrations";
-          this.request.frontEndParameters = processParameters(
-            defaultParams.registration
-          );
-          this.textRowcount = 10;
+          this.request.frontEndParameters = this.selectParameters.registration;
+          this.textRowcount = 8;
+          break;
+
+        case "3DSv1 - Standalone":
+          this.request.endPoint = "https://eu-test.oppwa.com/v1/threeDSecure";
+          this.request.frontEndParameters =
+            this.selectParameters.standalone3dv1;
+          this.textRowcount = 11;
+          break;
+
+        case "3DSv2 - Standalone":
+          this.request.endPoint = "https://eu-test.oppwa.com/v1/threeDSecure";
+          this.request.frontEndParameters =
+            this.selectParameters.standalone3dv2;
+          this.textRowcount = 27;
           break;
 
         default:
@@ -156,20 +166,6 @@ export default {
           this.request.frontEndParameters = "";
           break;
       }
-    },
-
-    generateTransactionId() {
-      this.request.defaultParameters.push(
-        `merchantTransactionId=test_transaction_${nanoid()}`
-      );
-    },
-
-    getResultURL() {
-      // entire URL
-      const currentURL = new URL(window.location.href);
-      this.request.defaultParameters.push(
-        `shopperResultUrl=${currentURL.origin}${currentURL.pathname}ResultPage.html`
-      );
     },
 
     async submitRequest() {
@@ -247,11 +243,56 @@ export default {
     },
 
     initParameters() {
-      this.generateTransactionId();
-      this.getResultURL();
+      // generate trx id
+      const merchantTransactionId = `\nmerchantTransactionId=test_transaction_${nanoid()}`;
+
+      // generate URL
+      const currentURL = new URL(window.location.href);
+      const shopperResultUrl = `\nshopperResultUrl=${currentURL.origin}${currentURL.pathname}ResultPage.html`;
+
+      // import all parameters and append result URL for the ones that need it for easy selection
+      this.selectParameters.payment = processParameters(defaultParams.server);
+      this.selectParameters.payment += merchantTransactionId;
+      this.selectParameters.payment += shopperResultUrl;
+
+      //
+      this.selectParameters.capture = processParameters(defaultParams.capture);
+
+      //
+      this.selectParameters.refund = processParameters(defaultParams.refund);
+
+      //
+      this.selectParameters.reversal = processParameters(
+        defaultParams.reversal
+      );
+
+      //
+      this.selectParameters.receipt = processParameters(defaultParams.receipt);
+
+      //
+      this.selectParameters.repeated = processParameters(
+        defaultParams.repeated
+      );
+
+      //
+      this.selectParameters.registration = processParameters(
+        defaultParams.registration
+      );
+
+      //
+      this.selectParameters.standalone3dv1 = processParameters(
+        defaultParams.standalone3dv1
+      );
+      this.selectParameters.standalone3dv1 += shopperResultUrl;
+
+      //
+      this.selectParameters.standalone3dv2 = processParameters(
+        defaultParams.standalone3dv2
+      );
+      this.selectParameters.standalone3dv2 += shopperResultUrl;
 
       // process the default params into the frontend using computed function
-      this.request.frontEndParameters = this.processParameters;
+      this.request.frontEndParameters = this.selectParameters.payment;
     },
   },
 
@@ -275,6 +316,8 @@ export default {
             <option>Receipt</option>
             <option>Repeated</option>
             <option>Registration - Standalone</option>
+            <option>3DSv1 - Standalone</option>
+            <option>3DSv2 - Standalone</option>
           </select>
         </div>
       </div>
