@@ -304,6 +304,12 @@ export default {
 
 <template>
   <div class="box">
+    <text-notif colorType="is-info">
+      This integration variant requires you to collect the card data which
+      increases your PCI-compliance scope. If you want to minimize your
+      PCI-compliance requirements, we recommend that you use COPYandPAY.
+    </text-notif>
+
     <div class="field">
       <div class="control">
         <label for="" class="label">Type</label>

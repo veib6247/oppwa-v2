@@ -81,6 +81,11 @@ export default {
 
 <template>
   <div class="box">
+    <text-notif colorType="is-info">
+      This tool will allow you to decrypt the payload you would receive from the
+      PAY.ON gateway webhook notification.
+    </text-notif>
+
     <FormPassword
       label="BIP Secret"
       placeholder="614B31C2057DB34DFC8049AF2355513E72936056DBAA3999F0257C5A90530838"

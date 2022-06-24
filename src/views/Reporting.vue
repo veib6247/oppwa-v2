@@ -100,6 +100,12 @@ export default {
 
 <template>
   <div class="box">
+    <text-notif colorType="is-info">
+      Transaction reports allows you to search for previous transactions using
+      the <code>merchantTransactionId</code> or <code>paymentId</code> in order
+      to query the response.
+    </text-notif>
+
     <!-- TOKEN -->
     <FormPassword
       label="Access Token"

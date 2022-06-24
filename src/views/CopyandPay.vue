@@ -296,6 +296,11 @@ export default {
 
 <template>
   <div class="box">
+    <text-notif colorType="is-info">
+      COPYandPAY is a SAQ-A compliant payment-form solution, making it both
+      secure and simple-to-integrate.
+    </text-notif>
+
     <!-- ENDPOINT -->
     <FormInput
       label="API Endpoint"
