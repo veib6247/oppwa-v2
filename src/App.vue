@@ -4,6 +4,7 @@ import CopyandPay from "./views/CopyandPay.vue";
 import ServertoServer from "./views/ServertoServer.vue";
 import Reporting from "./views/Reporting.vue";
 import WebhookDecryptor from "./views/WebhookDecryptor.vue";
+import Viewer from "./views/Viewer.vue";
 import NotFound from "./views/NotFound.vue";
 
 // basic routes
@@ -13,6 +14,7 @@ const routes = {
   "/servertoserver": ServertoServer,
   "/reporting": Reporting,
   "/webhookdecryptor": WebhookDecryptor,
+  "/viewer": Viewer,
 };
 
 export default {
@@ -22,6 +24,7 @@ export default {
     ServertoServer,
     Reporting,
     WebhookDecryptor,
+    Viewer,
   },
 
   data() {
@@ -32,6 +35,7 @@ export default {
         servertoserver: false,
         reporting: false,
         webhookdecryptor: false,
+        viewer: false,
       },
     };
   },
@@ -40,11 +44,18 @@ export default {
     /**
      * set boolean values for which tab should be active mode
      */
-    updateSelectedTab(copyandpay, servertoserver, reporting, webhookdecryptor) {
+    updateSelectedTab(
+      copyandpay,
+      servertoserver,
+      reporting,
+      webhookdecryptor,
+      viewer
+    ) {
       this.tabs.copyandpay = copyandpay;
       this.tabs.servertoserver = servertoserver;
       this.tabs.reporting = reporting;
       this.tabs.webhookdecryptor = webhookdecryptor;
+      this.tabs.viewer = viewer;
     },
 
     setSelectedTab() {
@@ -56,31 +67,35 @@ export default {
 
       switch (currentHash) {
         case "":
-          this.updateSelectedTab(true, false, false, false);
+          this.updateSelectedTab(true, false, false, false, false);
           break;
 
         case "#/":
-          this.updateSelectedTab(true, false, false, false);
+          this.updateSelectedTab(true, false, false, false, false);
           break;
 
         case "#/copyandpay":
-          this.updateSelectedTab(true, false, false, false);
+          this.updateSelectedTab(true, false, false, false, false);
           break;
 
         case "#/servertoserver":
-          this.updateSelectedTab(false, true, false, false);
+          this.updateSelectedTab(false, true, false, false, false);
           break;
 
         case "#/reporting":
-          this.updateSelectedTab(false, false, true, false);
+          this.updateSelectedTab(false, false, true, false, false);
           break;
 
         case "#/webhookdecryptor":
-          this.updateSelectedTab(false, false, false, true);
+          this.updateSelectedTab(false, false, false, true, false);
+          break;
+
+        case "#/viewer":
+          this.updateSelectedTab(false, false, false, false, true);
           break;
 
         default:
-          this.updateSelectedTab(false, false, false, false); // select cnp tab on default
+          this.updateSelectedTab(false, false, false, false, false); // select cnp tab on default
           break;
       }
     },
@@ -114,7 +129,7 @@ export default {
       <li :class="{ 'is-active': tabs.copyandpay }">
         <a
           href="#/copyandpay"
-          @click="updateSelectedTab(true, false, false, false)"
+          @click="updateSelectedTab(true, false, false, false, false)"
         >
           <span class="icon">
             <i class="fas fa-credit-card"></i>
@@ -126,7 +141,7 @@ export default {
       <li :class="{ 'is-active': tabs.servertoserver }">
         <a
           href="#/servertoserver"
-          @click="updateSelectedTab(false, true, false, false)"
+          @click="updateSelectedTab(false, true, false, false, false)"
         >
           <span class="icon">
             <i class="fas fa-server"></i>
@@ -138,7 +153,7 @@ export default {
       <li :class="{ 'is-active': tabs.reporting }">
         <a
           href="#/reporting"
-          @click="updateSelectedTab(false, false, true, false)"
+          @click="updateSelectedTab(false, false, true, false, false)"
         >
           <span class="icon">
             <i class="fas fa-file-alt"></i>
@@ -150,12 +165,24 @@ export default {
       <li :class="{ 'is-active': tabs.webhookdecryptor }">
         <a
           href="#/webhookdecryptor"
-          @click="updateSelectedTab(false, false, false, true)"
+          @click="updateSelectedTab(false, false, false, true, false)"
         >
           <span class="icon">
             <i class="fas fa-key"></i>
           </span>
           <span>Webhook Decryptor</span>
+        </a>
+      </li>
+
+      <li :class="{ 'is-active': tabs.viewer }">
+        <a
+          href="#/viewer"
+          @click="updateSelectedTab(false, false, false, false, true)"
+        >
+          <span class="icon">
+            <i class="fas fa-microscope"></i>
+          </span>
+          <span>Viewer</span>
         </a>
       </li>
     </ul>
