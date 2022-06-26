@@ -323,7 +323,7 @@ export default {
     <!-- PARAMS -->
     <TextData
       label="Data Parameters"
-      :row-count="17"
+      :row-count="16"
       :placeholder="processParameters"
       @keyup.ctrl.enter="generateCheckoutId"
       v-model="request.frontEndParameters"
