@@ -408,7 +408,7 @@ export default {
         v-show="showCustomizationModal"
         :is-active="showCustomizationModal"
         title="Widget Customization"
-        footer=""
+        footer="You can customize the look and feel of the COPYandPAY payment form using the options above."
         @close-action="showCustomizationModal = !showCustomizationModal"
         @keyup.esc="showCustomizationModal = !showCustomizationModal"
       >
