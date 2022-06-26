@@ -27,7 +27,7 @@ export default {
 
 <template>
   <div class="field">
-    <div class="field">
+    <div class="control">
       <input
         :id="id"
         type="checkbox"
