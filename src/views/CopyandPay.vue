@@ -66,6 +66,16 @@ export default {
       showCustomizationModal: false,
 
       wpwlOptions: {
+        labels: {
+          cardNumber: "Card Number",
+          cardHolder: "Card Holder",
+          expiryDate: "Expiry Date",
+          cvv: "CVV",
+          brand: "Brand",
+          submit: "Pay Now",
+          mmyy: "MM / YY",
+          register: "Register Now",
+        },
         locale: "en",
         style: "card",
         requireCvv: true,
@@ -412,6 +422,20 @@ export default {
         @close-action="showCustomizationModal = !showCustomizationModal"
         @keyup.esc="showCustomizationModal = !showCustomizationModal"
       >
+        <!-- widget style -->
+        <div class="field">
+          <label class="label">Style</label>
+          <div class="control">
+            <div class="select is-small is-fullwidth">
+              <select class="raleway" v-model="wpwlOptions.style">
+                <option>card</option>
+                <option>logos</option>
+                <option>plain</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
         <!-- shopperResultURL -->
         <FormInput
           label="Shopper Result URL"
@@ -433,19 +457,61 @@ export default {
           v-model="wpwlOptions.autofocus"
         />
 
-        <!-- widget style -->
-        <div class="field">
-          <label class="label">Style</label>
-          <div class="control">
-            <div class="select is-small is-dark is-fullwidth">
-              <select class="raleway" v-model="wpwlOptions.style">
-                <option>card</option>
-                <option>logos</option>
-                <option>plain</option>
-              </select>
-            </div>
-          </div>
-        </div>
+        <!-- cardNumber -->
+        <FormInput
+          label="Card Number"
+          helper="Label for the cardNumber field."
+          v-model="wpwlOptions.labels.cardNumber"
+        />
+
+        <!-- expiryDate -->
+        <FormInput
+          label="Expiry Date"
+          helper="Label for the expiryDate field."
+          v-model="wpwlOptions.labels.expiryDate"
+        />
+
+        <!-- mmyy -->
+        <FormInput
+          label="mmyy"
+          helper="Value for the mmyy placeholder in the expiry date field."
+          v-model="wpwlOptions.labels.mmyy"
+        />
+
+        <!-- cardHolder -->
+        <FormInput
+          label="Card Holder"
+          helper="Label for the cardHolder field."
+          v-model="wpwlOptions.labels.cardHolder"
+        />
+
+        <!-- cvv -->
+        <FormInput
+          label="CVV"
+          helper="Label for the cvv field."
+          v-model="wpwlOptions.labels.cvv"
+        />
+
+        <!-- brand -->
+        <FormInput
+          label="Brand"
+          helper="Value for the brand label dropdown."
+          v-model="wpwlOptions.labels.brand"
+        />
+
+        <!-- submit -->
+        <FormInput
+          label="Submit"
+          helper="Label for the submit button."
+          v-model="wpwlOptions.labels.submit"
+        />
+
+        <!-- register -->
+        <FormInput
+          label="Register (Standalone RG)"
+          helper="Label for the submit button for standalone card registration."
+          v-model="wpwlOptions.labels.register"
+        />
 
         <label class="label">Widget Customizations</label>
         <p class="is-size-7">
