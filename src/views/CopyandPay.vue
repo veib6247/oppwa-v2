@@ -459,13 +459,6 @@ export default {
           :is-disabled="overrideLabels"
         />
 
-        <FormSwitch
-          id="overrideLabels"
-          function-name="Override Labels"
-          label="Overrides the default form labels (even when custom locale is set)."
-          v-model="overrideLabels"
-        />
-
         <Transition>
           <div class="box" v-if="overrideLabels">
             <!-- cardNumber -->
@@ -526,6 +519,8 @@ export default {
           </div>
         </Transition>
 
+        <hr />
+
         <label class="label">Widget Customizations</label>
         <p class="is-size-7">
           The following are shown with their default values in the
@@ -536,6 +531,13 @@ export default {
             >documentation</a
           >.
         </p>
+
+        <FormSwitch
+          id="overrideLabels"
+          function-name="Override Labels"
+          label="Overrides the default form labels (even when custom locale is set)."
+          v-model="overrideLabels"
+        />
 
         <FormSwitch
           id="requireCvv"
