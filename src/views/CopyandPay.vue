@@ -66,16 +66,6 @@ export default {
       showCustomizationModal: false,
 
       wpwlOptions: {
-        labels: {
-          cardNumber: "Card Number",
-          cardHolder: "Card Holder",
-          expiryDate: "Expiry Date",
-          cvv: "CVV",
-          brand: "Brand",
-          submit: "Pay Now",
-          mmyy: "MM / YY",
-          register: "Register Now",
-        },
         locale: "en",
         style: "card",
         requireCvv: true,
@@ -97,6 +87,19 @@ export default {
         spinner: {
           color: "pink",
         },
+      },
+
+      overrideLabels: false,
+
+      labels: {
+        cardNumber: "Card Number",
+        cardHolder: "Card Holder",
+        expiryDate: "Expiry Date",
+        cvv: "CVV",
+        brand: "Brand",
+        submit: "Pay Now",
+        mmyy: "MM / YY",
+        register: "Register Now",
       },
 
       disableButtons: {
@@ -193,6 +196,11 @@ export default {
       // this.unloadWidget();
 
       this.createWidgetScriptTag();
+
+      // check if labels are overridden
+      if (this.overrideLabels) {
+        this.wpwlOptions.labels = this.labels;
+      }
 
       wpwlOptions = this.wpwlOptions; // apply customizations to the wpwlOptions object
 
@@ -443,13 +451,6 @@ export default {
           v-model="shopperResultURL"
         />
 
-        <!-- locale -->
-        <FormInput
-          label="Locale"
-          helper="Display language of the widget."
-          v-model="wpwlOptions.locale"
-        />
-
         <!-- autofocus -->
         <FormInput
           label="Autofocus"
@@ -457,61 +458,79 @@ export default {
           v-model="wpwlOptions.autofocus"
         />
 
-        <!-- cardNumber -->
+        <!-- locale -->
         <FormInput
-          label="Card Number"
-          helper="Label for the cardNumber field."
-          v-model="wpwlOptions.labels.cardNumber"
+          label="Locale"
+          helper="Display language of the widget."
+          v-model="wpwlOptions.locale"
         />
 
-        <!-- expiryDate -->
-        <FormInput
-          label="Expiry Date"
-          helper="Label for the expiryDate field."
-          v-model="wpwlOptions.labels.expiryDate"
+        <FormSwitch
+          id="overrideLabels"
+          function-name="Override Labels"
+          label="This is override the default form labels (even when custom locale is set)."
+          v-model="overrideLabels"
         />
 
-        <!-- mmyy -->
-        <FormInput
-          label="mmyy"
-          helper="Value for the mmyy placeholder in the expiry date field."
-          v-model="wpwlOptions.labels.mmyy"
-        />
+        <Transition>
+          <div class="box" v-if="overrideLabels">
+            <!-- cardNumber -->
+            <FormInput
+              label="Card Number"
+              helper="Label for the cardNumber field."
+              v-model="labels.cardNumber"
+            />
 
-        <!-- cardHolder -->
-        <FormInput
-          label="Card Holder"
-          helper="Label for the cardHolder field."
-          v-model="wpwlOptions.labels.cardHolder"
-        />
+            <!-- expiryDate -->
+            <FormInput
+              label="Expiry Date"
+              helper="Label for the expiryDate field."
+              v-model="labels.expiryDate"
+            />
 
-        <!-- cvv -->
-        <FormInput
-          label="CVV"
-          helper="Label for the cvv field."
-          v-model="wpwlOptions.labels.cvv"
-        />
+            <!-- mmyy -->
+            <FormInput
+              label="mmyy"
+              helper="Value for the mmyy placeholder in the expiry date field."
+              v-model="labels.mmyy"
+            />
 
-        <!-- brand -->
-        <FormInput
-          label="Brand"
-          helper="Value for the brand label dropdown."
-          v-model="wpwlOptions.labels.brand"
-        />
+            <!-- cardHolder -->
+            <FormInput
+              label="Card Holder"
+              helper="Label for the cardHolder field."
+              v-model="labels.cardHolder"
+            />
 
-        <!-- submit -->
-        <FormInput
-          label="Submit"
-          helper="Label for the submit button."
-          v-model="wpwlOptions.labels.submit"
-        />
+            <!-- cvv -->
+            <FormInput
+              label="CVV"
+              helper="Label for the cvv field."
+              v-model="labels.cvv"
+            />
 
-        <!-- register -->
-        <FormInput
-          label="Register (Standalone RG)"
-          helper="Label for the submit button for standalone card registration."
-          v-model="wpwlOptions.labels.register"
-        />
+            <!-- brand -->
+            <FormInput
+              label="Brand"
+              helper="Value for the brand label dropdown."
+              v-model="labels.brand"
+            />
+
+            <!-- submit -->
+            <FormInput
+              label="Submit"
+              helper="Label for the submit button."
+              v-model="labels.submit"
+            />
+
+            <!-- register -->
+            <FormInput
+              label="Register (Standalone RG)"
+              helper="Label for the submit button for standalone card registration."
+              v-model="labels.register"
+            />
+          </div>
+        </Transition>
 
         <label class="label">Widget Customizations</label>
         <p class="is-size-7">
