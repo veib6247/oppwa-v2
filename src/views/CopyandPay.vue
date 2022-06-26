@@ -444,13 +444,6 @@ export default {
           </div>
         </div>
 
-        <!-- shopperResultURL -->
-        <FormInput
-          label="Shopper Result URL"
-          helper="The user is redirected to this page after clicking the Pay Now button on the widget."
-          v-model="shopperResultURL"
-        />
-
         <!-- autofocus -->
         <FormInput
           label="Autofocus"
@@ -463,12 +456,13 @@ export default {
           label="Locale"
           helper="Display language of the widget."
           v-model="wpwlOptions.locale"
+          :is-disabled="overrideLabels"
         />
 
         <FormSwitch
           id="overrideLabels"
           function-name="Override Labels"
-          label="This is override the default form labels (even when custom locale is set)."
+          label="Overrides the default form labels (even when custom locale is set)."
           v-model="overrideLabels"
         />
 
@@ -658,6 +652,12 @@ export default {
 
         <Transition>
           <fieldset :disabled="overrideBrandlist" v-if="!overrideBrandlist">
+            <!-- <text-notif>
+              Selected Brands:
+              <span v-for="brand in selectedBrands" :key="brand"
+                >"{{ brand }}",
+              </span>
+            </text-notif> -->
             <!-- Brand lists -->
             <div class="field">
               <label class="label">Brands</label>
@@ -675,15 +675,17 @@ export default {
                   </select>
                 </div>
               </div>
+              [<span
+                class="subtitle is-size-7"
+                v-for="brand in selectedBrands"
+                :key="brand"
+                >{{ brand }}&nbsp;</span
+              >]
             </div>
-            <text-notif>
-              Selected Brands:
-              <span v-for="brand in selectedBrands" :key="brand"
-                >"{{ brand }}",
-              </span>
-            </text-notif>
           </fieldset>
         </Transition>
+
+        <br />
 
         <!-- manual input of brand list -->
         <Transition>
@@ -695,6 +697,13 @@ export default {
             v-if="overrideBrandlist"
           />
         </Transition>
+
+        <!-- shopperResultURL -->
+        <FormInput
+          label="Shopper Result URL"
+          helper="The user is redirected to this page after clicking the Pay Now button on the widget."
+          v-model="shopperResultURL"
+        />
       </Modal>
     </Transition>
 

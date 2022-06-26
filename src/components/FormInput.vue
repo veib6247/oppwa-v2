@@ -21,6 +21,12 @@ export default {
       default: "",
     },
 
+    isDisabled: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
+
     modelValue: {
       type: String,
       default: "",
@@ -38,6 +44,7 @@ export default {
         class="input is-small mono"
         spellcheck="false"
         :placeholder="placeholder"
+        :disabled="isDisabled"
         :value="modelValue"
         @input="$emit('update:modelValue', $event.target.value)"
       />
