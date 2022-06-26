@@ -106,6 +106,14 @@ export default {
       to query the response.
     </text-notif>
 
+    <!-- toggle for environments -->
+    <FormSwitch
+      functionName="Live Mode"
+      id="liveModeToggle"
+      label="Toggles the query between test and live environments"
+      v-model="isLiveMode"
+    />
+
     <!-- TOKEN -->
     <FormPassword
       label="Access Token"
@@ -125,37 +133,34 @@ export default {
       @keyup.enter="processQuery"
     />
 
-    <!-- query type -->
-    <div class="field">
-      <label class="label">Search Type</label>
-      <div class="control">
-        <div class="select is-small">
-          <select class="mono" v-model="selectedQueryType">
-            <option>paymentId</option>
-            <option>merchantTransactionId</option>
-          </select>
+    <div class="columns">
+      <div class="column is-one-quarter">
+        <!-- query type -->
+        <div class="field">
+          <label class="label">Search Type</label>
+          <div class="control">
+            <div class="select is-small">
+              <select class="mono" v-model="selectedQueryType">
+                <option>paymentId</option>
+                <option>merchantTransactionId</option>
+              </select>
+            </div>
+          </div>
+
+          <p class="help">Select the type and input your query.</p>
         </div>
       </div>
-
-      <p class="help">Select the type and input your query.</p>
+      <div class="column">
+        <!-- Query Value -->
+        <FormInput
+          label="Query Value"
+          placeholder="e.g. '8a82944a4cc25ebf014cc2c782423202', or 'test123'"
+          helper="The ID of the transaction you are looking for."
+          v-model="request.querySlug"
+          @keyup.enter="processQuery"
+        />
+      </div>
     </div>
-
-    <!-- toggle for environments -->
-    <FormSwitch
-      functionName="Enable LIVE mode"
-      id="liveModeToggle"
-      label="Toggles the query between test and live environments"
-      v-model="isLiveMode"
-    />
-
-    <!-- Query Value -->
-    <FormInput
-      label="Query Value"
-      placeholder="8a82944a4cc25ebf014cc2c782423202 or test123"
-      helper="The ID of the transaction you are looking for."
-      v-model="request.querySlug"
-      @keyup.enter="processQuery"
-    />
 
     <!-- <br /> -->
 
