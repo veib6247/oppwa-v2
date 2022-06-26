@@ -408,7 +408,7 @@ export default {
         v-show="showCustomizationModal"
         :is-active="showCustomizationModal"
         title="Widget Customization"
-        footer="Dev note: If your screen gets stuck and can't scroll up, press shift + tab multiple times to manually go up. You can also click on a field and press esc to close. Fix coming soon."
+        footer=""
         @close-action="showCustomizationModal = !showCustomizationModal"
         @keyup.esc="showCustomizationModal = !showCustomizationModal"
       >

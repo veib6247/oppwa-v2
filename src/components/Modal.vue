@@ -34,7 +34,7 @@ export default {
       <section class="modal-card-body">
         <slot></slot>
       </section>
-      <footer class="modal-card-foot">
+      <footer class="modal-card-foot" v-if="footer !== ''">
         <p class="is-size-7">
           {{ footer }}
         </p>
