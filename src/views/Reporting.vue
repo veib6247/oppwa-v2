@@ -52,7 +52,7 @@ export default {
         this.request.endpoint = `https://${subDomain}.oppwa.com/v1/query?entityId=${this.request.entityId}&merchantTransactionId=${this.request.querySlug}`;
       }
 
-      console.info(`Generated URL: ${this.request.endpoint}`);
+      // console.info(`Generated URL: ${this.request.endpoint}`);
     },
 
     async processQuery() {
