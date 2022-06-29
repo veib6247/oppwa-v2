@@ -164,6 +164,23 @@ export default {
     :is-rounded="true"
     @submit-data="redirectToHome"
   />
+
+  <!-- noice -->
+  <div v-if="response.amount === '69.00'">
+    <div class="media">
+      <div class="media-left">
+        <figure class="image is-128x128">
+          <img src="./assets/noice.png" />
+        </figure>
+      </div>
+      <div class="media-content">
+        <p class="title is-4">noice</p>
+        <p class="subtitle is-6">
+          coal coal coal coal coal coal coal coal coal coal coal...
+        </p>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style scoped>
