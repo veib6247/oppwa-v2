@@ -7,6 +7,7 @@ import FormDisplayResponse from "./components/FormDisplayResponse.vue";
 // import the result script
 const fetchSessionPath = require("url:./../php/GetSessionData.php");
 const getTransactionResultPath = require("url:./../php/GetTransactionResults.php");
+const noiceImage = require("url:./assets/noice.png");
 
 export default {
   components: { FormButton, TextNotif, FormDisplayResponse },
@@ -18,6 +19,7 @@ export default {
       sessionData: "",
       error: "",
       response: "",
+      noiceImagePath: "",
     };
   },
 
@@ -103,6 +105,8 @@ export default {
   mounted() {
     this.getURLParameters();
     this.fetchSessionData();
+
+    this.noiceImagePath = noiceImage;
   },
 };
 </script>
@@ -166,21 +170,22 @@ export default {
   />
 
   <!-- noice -->
-  <div v-if="response.amount === '69.00'">
-    <div class="media">
-      <div class="media-left">
-        <figure class="image is-128x128">
-          <img src="./assets/noice.png" />
-        </figure>
-      </div>
-      <div class="media-content">
-        <p class="title is-4">noice</p>
-        <p class="subtitle is-6">
-          coal coal coal coal coal coal coal coal coal coal coal...
-        </p>
+  <nav class="level">
+    <div class="level-item">
+      <div v-if="response.amount === '69.00'">
+        <div class="media">
+          <div class="media-left">
+            <figure class="image is-128x128">
+              <img :src="noiceImagePath" />
+            </figure>
+          </div>
+          <div class="media-content">
+            <p class="title is-4">noice</p>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
+  </nav>
 </template>
 
 <style scoped>
