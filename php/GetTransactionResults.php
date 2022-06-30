@@ -12,42 +12,41 @@ $responseData = request($data_object->url, $data_object->data, $data_object->aut
 
 echo $responseData;
 
-
 function request($url, $data, $accessToken)
 {
-    $ch = curl_init();
+ $ch = curl_init();
 
-    curl_setopt_array($ch, array(
-        CURLOPT_URL => $url . "?" . "entityId=" . get_entity($data),
-        CURLOPT_HTTPHEADER => array('Authorization:Bearer ' . $accessToken),
-        CURLOPT_CUSTOMREQUEST => 'GET',
-        CURLOPT_SSL_VERIFYPEER => true,
-        CURLOPT_RETURNTRANSFER => true
-    ));
+ curl_setopt_array($ch, array(
+  CURLOPT_URL            => $url . "?" . "entityId=" . get_entity($data),
+  CURLOPT_HTTPHEADER     => array('Authorization:Bearer ' . $accessToken),
+  CURLOPT_CUSTOMREQUEST  => 'GET',
+  CURLOPT_SSL_VERIFYPEER => true,
+  CURLOPT_RETURNTRANSFER => true,
+ ));
 
-    $responseData = curl_exec($ch);
+ $responseData = curl_exec($ch);
 
-    if (curl_errno($ch)) {
-        return curl_error($ch);
-    }
+ if (curl_errno($ch)) {
+  return curl_error($ch);
+ }
 
-    curl_close($ch);
+ curl_close($ch);
 
-    return $responseData;
+ return $responseData;
 }
 
 function get_entity($str_data)
 {
-  # chop the strings and locate the entityId parameter
-  $entity_parameter = explode('&', $str_data);
+ # chop the strings and locate the entityId parameter
+ $entity_parameter = explode('&', $str_data);
 
-  foreach ($entity_parameter as $item) {
-    $key = explode('=', $item)[0];
+ foreach ($entity_parameter as $item) {
+  $key = explode('=', $item)[0];
 
-    if ($key == 'entityId') {
-      $value = explode('=', $item)[1];
-    }
+  if ($key == 'entityId') {
+   $value = explode('=', $item)[1];
   }
+ }
 
-  return $value;
+ return $value;
 }
