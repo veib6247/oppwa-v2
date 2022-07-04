@@ -1,1 +1,1 @@
-Domain has expired. But you can still download the release and host the app yourself.
+New home: https://oppwa-v2.herokuapp.com/
