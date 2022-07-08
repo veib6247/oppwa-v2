@@ -133,26 +133,22 @@
                 </span>
               </a>
             </p>
-
-            <br />
-
-            <p>
-              <a
-                class="button is-small is-dark"
-                href="https://paypal.me/bryanolandres?locale.x=en_US"
-                target="_blank"
-              >
-                <span class="icon is-medium">
-                  <i class="fab fa-paypal"></i>
-                </span>
-                <span> Consider Donating </span>
-              </a>
-            </p>
           </div>
         </div>
       </div>
     </footer>
     <!-- local js -->
     <script type="module" src="ResultPage.js"></script>
+
+    <!-- ko-fi floating widget -->
+    <script src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"></script>
+    <script>
+      kofiWidgetOverlay.draw('fukazer0', {
+        type: 'floating-chat',
+        'floating-chat.donateButton.text': 'Support me',
+        'floating-chat.donateButton.background-color': '#00b9fe',
+        'floating-chat.donateButton.text-color': '#fff',
+      })
+    </script>
   </body>
 </html>
