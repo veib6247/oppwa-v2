@@ -1,3 +1,4 @@
 .parcel-cache
+dist
 assets
 node_modules
